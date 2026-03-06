@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 
 export const SOLARPUNK_MATERIALS = {
-  greenFloor: new THREE.MeshReflectorMaterial({
+  greenFloor: new THREE.MeshStandardMaterial({
     color: 0x1a3a1a,
     metalness: 0.2,
     roughness: 0.1,
-  } as any),
+  }),
 
   ecoBrick: new THREE.MeshStandardMaterial({
     color: 0x2d5016,

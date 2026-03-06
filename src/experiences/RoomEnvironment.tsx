@@ -17,7 +17,6 @@ export default function RoomEnvironment() {
         <MeshReflectorMaterial
           blur={[300, 100]}
           resolution={1024}
-          scale={1.5}
           color="#1a3a1a"
           metalness={0.2}
           roughness={0.1}

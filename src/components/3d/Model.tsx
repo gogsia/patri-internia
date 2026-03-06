@@ -23,7 +23,7 @@ export default function Model({
   useEffect(() => {
     if (groupRef.current) {
       groupRef.current.position.set(...position);
-      groupRef.current.scale.multiplyScalar(scale);
+      groupRef.current.scale.set(scale, scale, scale);
       groupRef.current.rotation.set(...rotation);
     }
   }, [position, scale, rotation]);
