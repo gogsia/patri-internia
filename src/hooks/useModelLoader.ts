@@ -3,7 +3,7 @@
 import { useGLTF } from '@react-three/drei';
 
 // Simple cache for preloaded models
-const modelCache: Record<string, any> = {};
+const modelCache: Record<string, boolean> = {};
 
 export function useModelLoader(path: string) {
   // Preload model on first use

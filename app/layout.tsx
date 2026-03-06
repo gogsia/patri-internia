@@ -16,6 +16,12 @@ export const metadata: Metadata = {
   title: 'Solarpunk Interiors | 3D Design Explorer',
   description:
     'Immersive 3D solarpunk interior design platform with orbital room navigation.',
+  keywords: ['solarpunk', 'interior design', 'three.js', 'react three fiber', '3d configurator'],
+  openGraph: {
+    title: 'Solarpunk Interiors',
+    description: 'Design eco-futuristic interiors in an interactive 3D canvas.',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
