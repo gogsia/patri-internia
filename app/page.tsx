@@ -5,12 +5,22 @@ import FurniturePanel from '@/components/ui/FurniturePanel';
 import LayoutControls from '@/components/ui/LayoutControls';
 import Toolbar from '@/components/ui/Toolbar';
 import type { FurnitureItem, RoomLayout } from '@/types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFurnitureKeyboard } from '@/hooks/useFurnitureKeyboard';
+import { useUndoRedo } from '@/hooks/useUndoRedo';
+import { HistoryProvider, useHistory } from '@/hooks/useHistory';
 
-export default function Home() {
+function HomeContent() {
   const [furniture, setFurniture] = useState<FurnitureItem[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (furniture.length > 0) {
+      history.push(furniture);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [furniture]);
 
   useFurnitureKeyboard({
     onDelete: () => {
@@ -20,6 +30,23 @@ export default function Home() {
       }
     },
     onDeselect: () => setSelectedId(null),
+  });
+
+  useUndoRedo({
+    onUndo: () => {
+      const prevState = history.undo();
+      if (prevState) {
+        setFurniture(prevState);
+        setSelectedId(null);
+      }
+    },
+    onRedo: () => {
+      const nextState = history.redo();
+      if (nextState) {
+        setFurniture(nextState);
+        setSelectedId(null);
+      }
+    },
   });
 
   const handleAddFurniture = (item: FurnitureItem) => {
@@ -54,12 +81,31 @@ export default function Home() {
         onSelectChange={setSelectedId}
         onFurnitureMove={handleFurnitureMove}
       />
-      <Toolbar selectedId={selectedId} onDelete={() => {
-        if (selectedId) {
-          setFurniture((prev) => prev.filter((item) => item.id !== selectedId));
-          setSelectedId(null);
-        }
-      }} />
+      <Toolbar
+        selectedId={selectedId}
+        canUndo={history.canUndo}
+        canRedo={history.canRedo}
+        onUndo={() => {
+          const prevState = history.undo();
+          if (prevState) {
+            setFurniture(prevState);
+            setSelectedId(null);
+          }
+        }}
+        onRedo={() => {
+          const nextState = history.redo();
+          if (nextState) {
+            setFurniture(nextState);
+            setSelectedId(null);
+          }
+        }}
+        onDelete={() => {
+          if (selectedId) {
+            setFurniture((prev) => prev.filter((item) => item.id !== selectedId));
+            setSelectedId(null);
+          }
+        }}
+      />
       <FurniturePanel onAdd={handleAddFurniture} />
       <LayoutControls furniture={furniture} onLoad={handleLoadLayout} />
 
@@ -76,5 +122,13 @@ export default function Home() {
         <p>Right-drag: pan</p>
       </div>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <HistoryProvider>
+      <HomeContent />
+    </HistoryProvider>
   );
 }

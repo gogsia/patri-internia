@@ -3,18 +3,52 @@
 import { useState } from 'react';
 import { downloadCanvasScreenshot, shareDesign } from '@/lib/share';
 
+type ToolbarProps = {
+  selectedId?: string | null;
+  canUndo?: boolean;
+  canRedo?: boolean;
+  onUndo?: () => void;
+  onRedo?: () => void;
+  onDelete?: () => void;
+};
+
 export default function Toolbar({
   selectedId = null,
+  canUndo = false,
+  canRedo = false,
+  onUndo = () => {},
+  onRedo = () => {},
   onDelete = () => {},
-}: Readonly<{ selectedId?: string | null; onDelete?: () => void }>) {
+}: Readonly<ToolbarProps>) {
   const [showHelp, setShowHelp] = useState(false);
 
   return (
     <>
       <nav
         aria-label="Design actions"
-        className="absolute left-4 top-4 z-30 flex gap-2 rounded-xl border border-[#355139] bg-black/45 p-2 backdrop-blur-sm"
+        className="absolute left-4 top-4 z-30 flex flex-wrap gap-2 rounded-xl border border-[#355139] bg-black/45 p-2 backdrop-blur-sm"
       >
+        <button
+          onClick={onUndo}
+          disabled={!canUndo}
+          aria-label="Undo (Ctrl+Z)"
+          title="Undo"
+          className="rounded-md border border-[#314a35] bg-[#16241a] px-3 py-2 text-xs font-semibold text-zinc-100 hover:bg-[#1e3224] disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          ↶ Undo
+        </button>
+        <button
+          onClick={onRedo}
+          disabled={!canRedo}
+          aria-label="Redo (Ctrl+Y)"
+          title="Redo"
+          className="rounded-md border border-[#314a35] bg-[#16241a] px-3 py-2 text-xs font-semibold text-zinc-100 hover:bg-[#1e3224] disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          ↷ Redo
+        </button>
+
+        <div className="w-px bg-[#314a35]"></div>
+
         <button
           onClick={() => setShowHelp((v) => !v)}
           aria-label="Toggle help"
@@ -60,9 +94,11 @@ export default function Toolbar({
               <li>Drag mouse: orbit camera</li>
               <li>Mouse wheel: zoom in/out</li>
               <li>Right-click + drag: pan</li>
-            <li>Drag furniture in 3D to move it</li>
-            <li>Press Delete to remove selected item</li>
-            <li>Press Escape to deselect</li>
+              <li>Click furniture to select</li>
+              <li>Drag furniture in 3D to move it</li>
+              <li>Press Delete to remove selected item</li>
+              <li>Press Escape to deselect</li>
+              <li>Ctrl+Z to undo, Ctrl+Y to redo</li>
             </ul>
             <button
               onClick={() => setShowHelp(false)}
