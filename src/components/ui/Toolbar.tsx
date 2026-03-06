@@ -3,7 +3,10 @@
 import { useState } from 'react';
 import { downloadCanvasScreenshot, shareDesign } from '@/lib/share';
 
-export default function Toolbar() {
+export default function Toolbar({
+  selectedId = null,
+  onDelete = () => {},
+}: Readonly<{ selectedId?: string | null; onDelete?: () => void }>) {
   const [showHelp, setShowHelp] = useState(false);
 
   return (
@@ -33,6 +36,15 @@ export default function Toolbar() {
         >
           Share
         </button>
+        {selectedId ? (
+          <button
+            onClick={onDelete}
+            aria-label="Delete selected furniture (or press Delete key)"
+            className="rounded-md border border-[#5d2f2f] bg-[#321717] px-3 py-2 text-xs font-semibold text-zinc-100 hover:bg-[#4a1f1f]"
+          >
+            Delete
+          </button>
+        ) : null}
       </nav>
 
       {showHelp ? (
@@ -48,8 +60,9 @@ export default function Toolbar() {
               <li>Drag mouse: orbit camera</li>
               <li>Mouse wheel: zoom in/out</li>
               <li>Right-click + drag: pan</li>
-              <li>Add furniture from the left panel</li>
-              <li>Save and reload layouts from the right panel</li>
+            <li>Drag furniture in 3D to move it</li>
+            <li>Press Delete to remove selected item</li>
+            <li>Press Escape to deselect</li>
             </ul>
             <button
               onClick={() => setShowHelp(false)}

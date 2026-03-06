@@ -6,9 +6,21 @@ import LayoutControls from '@/components/ui/LayoutControls';
 import Toolbar from '@/components/ui/Toolbar';
 import type { FurnitureItem, RoomLayout } from '@/types';
 import { useState } from 'react';
+import { useFurnitureKeyboard } from '@/hooks/useFurnitureKeyboard';
 
 export default function Home() {
   const [furniture, setFurniture] = useState<FurnitureItem[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  useFurnitureKeyboard({
+    onDelete: () => {
+      if (selectedId) {
+        setFurniture((prev) => prev.filter((item) => item.id !== selectedId));
+        setSelectedId(null);
+      }
+    },
+    onDeselect: () => setSelectedId(null),
+  });
 
   const handleAddFurniture = (item: FurnitureItem) => {
     const randomX = Math.random() * 6 - 3;
@@ -36,8 +48,18 @@ export default function Home() {
 
   return (
     <main className="relative h-screen w-full overflow-hidden bg-[#111815]">
-      <Scene furniture={furniture} onFurnitureMove={handleFurnitureMove} />
-      <Toolbar />
+      <Scene
+        furniture={furniture}
+        selectedId={selectedId}
+        onSelectChange={setSelectedId}
+        onFurnitureMove={handleFurnitureMove}
+      />
+      <Toolbar selectedId={selectedId} onDelete={() => {
+        if (selectedId) {
+          setFurniture((prev) => prev.filter((item) => item.id !== selectedId));
+          setSelectedId(null);
+        }
+      }} />
       <FurniturePanel onAdd={handleAddFurniture} />
       <LayoutControls furniture={furniture} onLoad={handleLoadLayout} />
 

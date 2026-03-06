@@ -18,13 +18,25 @@ const SolarpunkRoom = dynamic(() => import('@/experiences/SolarpunkRoom'), {
 
 type SceneProps = {
   furniture?: FurnitureItem[];
+  selectedId?: string | null;
+  onSelectChange?: (id: string | null) => void;
   onFurnitureMove: (id: string, nextPosition: [number, number, number]) => void;
 };
 
-export default function Scene({ furniture = [], onFurnitureMove }: Readonly<SceneProps>) {
+export default function Scene({
+  furniture = [],
+  selectedId = null,
+  onSelectChange = () => {},
+  onFurnitureMove,
+}: Readonly<SceneProps>) {
   return (
     <Suspense fallback={<div>Loading Scene...</div>}>
-      <SolarpunkRoom furniture={furniture} onFurnitureMove={onFurnitureMove} />
+      <SolarpunkRoom
+        furniture={furniture}
+        selectedId={selectedId}
+        onSelectChange={onSelectChange}
+        onFurnitureMove={onFurnitureMove}
+      />
     </Suspense>
   );
 }

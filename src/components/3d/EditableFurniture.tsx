@@ -7,22 +7,25 @@ import type { FurnitureItem } from '@/types';
 
 type EditableFurnitureProps = {
   items: FurnitureItem[];
+  selectedId: string | null;
+  onSelectChange: (id: string | null) => void;
   onMove: (id: string, nextPosition: [number, number, number]) => void;
   onDragStateChange: (dragging: boolean) => void;
 };
 
 export default function EditableFurniture({
   items,
+  selectedId,
+  onSelectChange,
   onMove,
   onDragStateChange,
 }: Readonly<EditableFurnitureProps>) {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const dragOffset = useRef(new THREE.Vector3());
 
   const handlePointerDown = (event: ThreeEvent<PointerEvent>, item: FurnitureItem) => {
     event.stopPropagation();
-    setSelectedId(item.id);
+    onSelectChange(item.id);
     setDraggingId(item.id);
     onDragStateChange(true);
 

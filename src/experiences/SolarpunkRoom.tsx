@@ -12,11 +12,15 @@ import RoomEnvironment from './RoomEnvironment';
 
 type SolarpunkRoomProps = {
   furniture?: FurnitureItem[];
+  selectedId?: string | null;
+  onSelectChange?: (id: string | null) => void;
   onFurnitureMove: (id: string, nextPosition: [number, number, number]) => void;
 };
 
 export default function SolarpunkRoom({
   furniture = [],
+  selectedId = null,
+  onSelectChange = () => {},
   onFurnitureMove,
 }: Readonly<SolarpunkRoomProps>) {
   const controls = useSceneControls();
@@ -49,6 +53,8 @@ export default function SolarpunkRoom({
         {/* Editable furniture placements */}
         <EditableFurniture
           items={furniture}
+          selectedId={selectedId}
+          onSelectChange={onSelectChange}
           onMove={onFurnitureMove}
           onDragStateChange={setIsDraggingFurniture}
         />
