@@ -34,6 +34,26 @@ function HomeContent() {
       commitFurniture((prev) => prev.filter((item) => item.id !== selectedId));
       setSelectedId(null);
     },
+    onDuplicate: () => {
+      if (!selectedId) {
+        return;
+      }
+
+      commitFurniture((prev) => {
+        const selected = prev.find((item) => item.id === selectedId);
+        if (!selected) {
+          return prev;
+        }
+
+        const duplicated: FurnitureItem = {
+          ...selected,
+          id: `${selected.id}-copy-${Date.now()}`,
+          position: [selected.position[0] + 0.9, selected.position[1], selected.position[2] + 0.9],
+        };
+
+        return [...prev, duplicated];
+      });
+    },
     onDeselect: () => setSelectedId(null),
   });
 
@@ -98,6 +118,7 @@ function HomeContent() {
         selectedId={selectedId}
         canUndo={history.canUndo}
         canRedo={history.canRedo}
+        canClear={furniture.length > 0}
         onUndo={() => {
           const prevState = history.undo();
           if (prevState) {
@@ -117,6 +138,43 @@ function HomeContent() {
             return;
           }
           commitFurniture((prev) => prev.filter((item) => item.id !== selectedId));
+          setSelectedId(null);
+        }}
+        onDuplicate={() => {
+          if (!selectedId) {
+            return;
+          }
+
+          commitFurniture((prev) => {
+            const selected = prev.find((item) => item.id === selectedId);
+            if (!selected) {
+              return prev;
+            }
+
+            const duplicated: FurnitureItem = {
+              ...selected,
+              id: `${selected.id}-copy-${Date.now()}`,
+              position: [
+                selected.position[0] + 0.9,
+                selected.position[1],
+                selected.position[2] + 0.9,
+              ],
+            };
+
+            return [...prev, duplicated];
+          });
+        }}
+        onClear={() => {
+          if (furniture.length === 0) {
+            return;
+          }
+
+          const confirmed = window.confirm('Clear all furniture from this scene?');
+          if (!confirmed) {
+            return;
+          }
+
+          commitFurniture(() => []);
           setSelectedId(null);
         }}
       />
