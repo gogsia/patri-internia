@@ -1,25 +1,23 @@
 'use client';
 
+import Scene from '@/components/Scene';
+
 export default function Home() {
   return (
-    <main className="relative w-full h-screen bg-gray-900">
-      <div className="flex items-center justify-center h-full">
-        <div className="text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-solarpunk-lime mb-4 drop-shadow-lg">
-            Solarpunk Interiors
-          </h1>
-          <p className="text-lg text-gray-300 mb-8">
-            3D Immersive Interior Design Explorer
-          </p>
-          <div className="animate-pulse">
-            <p className="text-sm text-gray-400">
-              Phase 1 Setup Complete ✓
-            </p>
-            <p className="text-xs text-gray-500 mt-4">
-              Ready for 3D Canvas & Components
-            </p>
-          </div>
-        </div>
+    <main className="relative w-full h-screen overflow-hidden">
+      <Scene />
+      
+      {/* UI Overlay */}
+      <div className="absolute top-4 left-4 z-20 pointer-events-none">
+        <h1 className="text-3xl font-bold text-solarpunk-lime drop-shadow-lg">
+          Solarpunk Interiors
+        </h1>
+        <p className="text-sm text-gray-300">3D Immersive Design Explorer</p>
+      </div>
+
+      {/* Help Text */}
+      <div className="absolute bottom-4 right-4 z-20 text-xs text-gray-400 pointer-events-none text-right">
+        <p>🖱️ Drag to rotate | 🔍 Scroll to zoom | ⌘ Scroll to pan</p>
       </div>
     </main>
   );
