@@ -26,34 +26,45 @@ function HomeContent() {
     [history]
   );
 
+  const duplicateSelected = useCallback(() => {
+    if (!selectedId) {
+      return;
+    }
+
+    const selected = furniture.find((item) => item.id === selectedId);
+    if (!selected) {
+      return;
+    }
+
+    const duplicated: FurnitureItem = {
+      ...selected,
+      id: `${selected.id}-copy-${Date.now()}`,
+      position: [selected.position[0] + 0.9, selected.position[1], selected.position[2] + 0.9],
+    };
+
+    commitFurniture((prev) => [...prev, duplicated]);
+    setSelectedId(duplicated.id);
+  }, [commitFurniture, furniture, selectedId]);
+
+  const deleteSelected = useCallback(() => {
+    if (!selectedId) {
+      return;
+    }
+
+    if (furniture.length > 1) {
+      const confirmed = window.confirm('Delete selected furniture item?');
+      if (!confirmed) {
+        return;
+      }
+    }
+
+    commitFurniture((prev) => prev.filter((item) => item.id !== selectedId));
+    setSelectedId(null);
+  }, [commitFurniture, furniture.length, selectedId]);
+
   useFurnitureKeyboard({
-    onDelete: () => {
-      if (!selectedId) {
-        return;
-      }
-      commitFurniture((prev) => prev.filter((item) => item.id !== selectedId));
-      setSelectedId(null);
-    },
-    onDuplicate: () => {
-      if (!selectedId) {
-        return;
-      }
-
-      commitFurniture((prev) => {
-        const selected = prev.find((item) => item.id === selectedId);
-        if (!selected) {
-          return prev;
-        }
-
-        const duplicated: FurnitureItem = {
-          ...selected,
-          id: `${selected.id}-copy-${Date.now()}`,
-          position: [selected.position[0] + 0.9, selected.position[1], selected.position[2] + 0.9],
-        };
-
-        return [...prev, duplicated];
-      });
-    },
+    onDelete: deleteSelected,
+    onDuplicate: duplicateSelected,
     onDeselect: () => setSelectedId(null),
   });
 
@@ -134,35 +145,10 @@ function HomeContent() {
           }
         }}
         onDelete={() => {
-          if (!selectedId) {
-            return;
-          }
-          commitFurniture((prev) => prev.filter((item) => item.id !== selectedId));
-          setSelectedId(null);
+          deleteSelected();
         }}
         onDuplicate={() => {
-          if (!selectedId) {
-            return;
-          }
-
-          commitFurniture((prev) => {
-            const selected = prev.find((item) => item.id === selectedId);
-            if (!selected) {
-              return prev;
-            }
-
-            const duplicated: FurnitureItem = {
-              ...selected,
-              id: `${selected.id}-copy-${Date.now()}`,
-              position: [
-                selected.position[0] + 0.9,
-                selected.position[1],
-                selected.position[2] + 0.9,
-              ],
-            };
-
-            return [...prev, duplicated];
-          });
+          duplicateSelected();
         }}
         onClear={() => {
           if (furniture.length === 0) {

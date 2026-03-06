@@ -25,7 +25,10 @@ function cloneFurniture(items: FurnitureItem[]): FurnitureItem[] {
 }
 
 export function HistoryProvider({ children }: Readonly<{ children: ReactNode }>) {
-  const [history, setHistory] = useState<HistoryData>({ entries: [], index: -1 });
+  const [history, setHistory] = useState<HistoryData>({
+    entries: [{ furniture: [] }],
+    index: 0,
+  });
 
   const push = useCallback((furniture: FurnitureItem[]) => {
     setHistory((prev) => {
@@ -84,7 +87,7 @@ export function HistoryProvider({ children }: Readonly<{ children: ReactNode }>)
         undo,
         redo,
         canUndo: history.index > 0,
-        canRedo: history.index >= 0 && history.index < history.entries.length - 1,
+        canRedo: history.index < history.entries.length - 1,
       }}
     >
       {children}
