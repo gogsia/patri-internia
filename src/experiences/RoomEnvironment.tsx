@@ -1,8 +1,9 @@
 'use client';
 
 import { MeshReflectorMaterial } from '@react-three/drei';
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import * as THREE from 'three';
+import RoomModels from './RoomModels';
 
 export default function RoomEnvironment() {
   const floorRef = useRef<THREE.Mesh>(null);
@@ -58,6 +59,11 @@ export default function RoomEnvironment() {
           roughness={0.6}
         />
       </mesh>
+
+      {/* Room Models - Sketchfab GLTF imports */}
+      <Suspense fallback={null}>
+        <RoomModels />
+      </Suspense>
     </group>
   );
 }
