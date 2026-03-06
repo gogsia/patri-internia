@@ -6,6 +6,7 @@ import { EffectComposer, Pixelation } from '@react-three/postprocessing';
 import { Leva } from 'leva';
 import { Suspense } from 'react';
 import { useSceneControls } from '@/components/leva/SceneControls';
+import FurnitureInstances from '@/components/3d/FurnitureInstances';
 import type { FurnitureItem } from '@/types';
 import RoomEnvironment from './RoomEnvironment';
 
@@ -40,13 +41,8 @@ export default function SolarpunkRoom({ furniture = [] }: Readonly<SolarpunkRoom
           <RoomEnvironment />
         </Suspense>
 
-        {/* Phase 5 placeholder furniture meshes */}
-        {furniture.map((item) => (
-          <mesh key={item.id} position={item.position} rotation={item.rotation}>
-            <boxGeometry args={[0.8 * item.scale, 0.8 * item.scale, 0.8 * item.scale]} />
-            <meshStandardMaterial color="#86c26f" metalness={0.1} roughness={0.7} />
-          </mesh>
-        ))}
+        {/* Phase 6 optimization: render furniture with one instanced draw call */}
+        <FurnitureInstances items={furniture} />
 
         {/* Pixelated post-processing */}
         {controls.enablePixelation ? (
