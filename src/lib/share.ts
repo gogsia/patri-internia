@@ -1,17 +1,26 @@
 export async function shareDesign(title: string, text: string) {
-  const url = typeof window !== 'undefined' ? window.location.href : '';
+  const hasWindow = typeof globalThis.window === 'object';
+  const url = hasWindow ? globalThis.window.location.href : '';
 
-  if (typeof navigator !== 'undefined' && navigator.share) {
+  if (typeof globalThis.navigator === 'object' && globalThis.navigator.share) {
     try {
-      await navigator.share({ title, text, url });
+      await globalThis.navigator.share({ title, text, url });
       return true;
     } catch {
       return false;
     }
   }
 
+  if (!hasWindow) {
+    return false;
+  }
+
   const encodedText = encodeURIComponent(`${text} ${url}`);
-  window.open(`https://twitter.com/intent/tweet?text=${encodedText}`, '_blank', 'noopener,noreferrer');
+  globalThis.window.open(
+    `https://twitter.com/intent/tweet?text=${encodedText}`,
+    '_blank',
+    'noopener,noreferrer'
+  );
   return true;
 }
 
@@ -27,7 +36,7 @@ export function downloadCanvasScreenshot(filenamePrefix = 'solarpunk-layout') {
 
   const dataUrl = canvas.toDataURL('image/png');
   const link = document.createElement('a');
-  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const stamp = new Date().toISOString().replaceAll(':', '-').replaceAll('.', '-');
   link.href = dataUrl;
   link.download = `${filenamePrefix}-${stamp}.png`;
   link.click();

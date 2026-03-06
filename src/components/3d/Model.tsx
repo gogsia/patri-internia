@@ -16,7 +16,7 @@ export default function Model({
   position = [0, 0, 0],
   scale = 1,
   rotation = [0, 0, 0],
-}: ModelProps) {
+}: Readonly<ModelProps>) {
   const { scene } = useModelLoader(path);
   const groupRef = useRef<THREE.Group>(null);
 

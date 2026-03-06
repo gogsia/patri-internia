@@ -12,7 +12,7 @@ type LayoutControlsProps = {
 export default function LayoutControls({ furniture, onLoad }: Readonly<LayoutControlsProps>) {
   const [layoutName, setLayoutName] = useState('');
   // Used only to force a re-render after save/delete operations.
-  const [, setRefreshKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const layouts = getLayouts();
 
@@ -35,7 +35,10 @@ export default function LayoutControls({ furniture, onLoad }: Readonly<LayoutCon
   };
 
   return (
-    <aside className="absolute right-2 top-20 z-20 w-[min(18rem,48vw)] rounded-xl border border-[#355139] bg-black/40 p-3 backdrop-blur-sm sm:right-4 sm:w-72">
+    <aside
+      key={refreshKey}
+      className="absolute right-2 top-20 z-20 w-[min(18rem,48vw)] rounded-xl border border-[#355139] bg-black/40 p-3 backdrop-blur-sm sm:right-4 sm:w-72"
+    >
       <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[#a8ef8b]">Layouts</h2>
 
       <div className="mb-3 flex gap-2">

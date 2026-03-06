@@ -3,12 +3,12 @@ import type { RoomLayout } from '@/types';
 const STORAGE_KEY = 'solarpunk-layouts-v1';
 
 export function getLayouts(): Record<string, RoomLayout> {
-  if (typeof window === 'undefined') {
+  if (globalThis.window === undefined) {
     return {};
   }
 
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = globalThis.window.localStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as Record<string, RoomLayout>) : {};
   } catch {
     return {};
@@ -18,13 +18,13 @@ export function getLayouts(): Record<string, RoomLayout> {
 export function saveLayout(layout: RoomLayout): Record<string, RoomLayout> {
   const layouts = getLayouts();
   layouts[layout.id] = layout;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(layouts));
+  globalThis.window.localStorage.setItem(STORAGE_KEY, JSON.stringify(layouts));
   return layouts;
 }
 
 export function removeLayout(layoutId: string): Record<string, RoomLayout> {
   const layouts = getLayouts();
   delete layouts[layoutId];
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(layouts));
+  globalThis.window.localStorage.setItem(STORAGE_KEY, JSON.stringify(layouts));
   return layouts;
 }

@@ -1,4 +1,11 @@
-import { useContext, createContext, useState, useCallback, type ReactNode } from 'react';
+import {
+  useContext,
+  createContext,
+  useState,
+  useCallback,
+  useMemo,
+  type ReactNode,
+} from 'react';
 import type { FurnitureItem } from '@/types';
 
 type HistoryEntry = {
@@ -21,7 +28,7 @@ interface HistoryContextValue {
 const HistoryContext = createContext<HistoryContextValue | null>(null);
 
 function cloneFurniture(items: FurnitureItem[]): FurnitureItem[] {
-  return JSON.parse(JSON.stringify(items)) as FurnitureItem[];
+  return structuredClone(items);
 }
 
 export function HistoryProvider({ children }: Readonly<{ children: ReactNode }>) {
@@ -80,19 +87,18 @@ export function HistoryProvider({ children }: Readonly<{ children: ReactNode }>)
     return result;
   }, []);
 
-  return (
-    <HistoryContext.Provider
-      value={{
-        push,
-        undo,
-        redo,
-        canUndo: history.index > 0,
-        canRedo: history.index < history.entries.length - 1,
-      }}
-    >
-      {children}
-    </HistoryContext.Provider>
+  const value = useMemo(
+    () => ({
+      push,
+      undo,
+      redo,
+      canUndo: history.index > 0,
+      canRedo: history.index < history.entries.length - 1,
+    }),
+    [push, undo, redo, history.index, history.entries.length]
   );
+
+  return <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>;
 }
 
 export function useHistory() {

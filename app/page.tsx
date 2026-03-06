@@ -52,7 +52,7 @@ function HomeContent() {
     }
 
     if (furniture.length > 1) {
-      const confirmed = window.confirm('Delete selected furniture item?');
+      const confirmed = globalThis.confirm('Delete selected furniture item?');
       if (!confirmed) {
         return;
       }
@@ -155,7 +155,7 @@ function HomeContent() {
             return;
           }
 
-          const confirmed = window.confirm('Clear all furniture from this scene?');
+          const confirmed = globalThis.confirm('Clear all furniture from this scene?');
           if (!confirmed) {
             return;
           }

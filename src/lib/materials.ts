@@ -49,7 +49,7 @@ export const SOLAR_LIGHTING: LightingConfig = {
 export const NIGHT_MODE: LightingConfig = {
   ambientIntensity: 0.3,
   ambientColor: '#1a3a1a',
-  pointIntensity: 2.0,
+  pointIntensity: 2,
   pointColor: '#00ff00',
   directionIntensity: 0.2,
 };

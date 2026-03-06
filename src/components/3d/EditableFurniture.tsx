@@ -33,7 +33,7 @@ export default function EditableFurniture({
 
     dragOffset.current.set(event.point.x - item.position[0], 0, event.point.z - item.position[2]);
 
-    const eventTarget = event.target as EventTarget | null;
+    const eventTarget = event.target;
     if (
       eventTarget &&
       'setPointerCapture' in eventTarget &&
@@ -71,7 +71,7 @@ export default function EditableFurniture({
     setDraggingId(null);
     onDragStateChange(false);
 
-    const eventTarget = event.target as EventTarget | null;
+    const eventTarget = event.target;
     if (
       eventTarget &&
       'releasePointerCapture' in eventTarget &&
