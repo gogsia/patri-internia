@@ -28,9 +28,15 @@ export default function Home() {
     setFurniture(layout.furniture);
   };
 
+  const handleFurnitureMove = (id: string, nextPosition: [number, number, number]) => {
+    setFurniture((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, position: nextPosition } : item))
+    );
+  };
+
   return (
     <main className="relative h-screen w-full overflow-hidden bg-[#111815]">
-      <Scene furniture={furniture} />
+      <Scene furniture={furniture} onFurnitureMove={handleFurnitureMove} />
       <Toolbar />
       <FurniturePanel onAdd={handleAddFurniture} />
       <LayoutControls furniture={furniture} onLoad={handleLoadLayout} />

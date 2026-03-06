@@ -5,7 +5,7 @@ import Scene from '@/components/Scene';
 export default function Home() {
   return (
     <main className="relative w-full h-screen overflow-hidden">
-      <Scene />
+      <Scene furniture={[]} onFurnitureMove={() => {}} />
       
       {/* UI Overlay */}
       <div className="absolute top-4 left-4 z-20 pointer-events-none">

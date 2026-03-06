@@ -4,18 +4,23 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { EffectComposer, Pixelation } from '@react-three/postprocessing';
 import { Leva } from 'leva';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useSceneControls } from '@/components/leva/SceneControls';
-import FurnitureInstances from '@/components/3d/FurnitureInstances';
+import EditableFurniture from '@/components/3d/EditableFurniture';
 import type { FurnitureItem } from '@/types';
 import RoomEnvironment from './RoomEnvironment';
 
 type SolarpunkRoomProps = {
   furniture?: FurnitureItem[];
+  onFurnitureMove: (id: string, nextPosition: [number, number, number]) => void;
 };
 
-export default function SolarpunkRoom({ furniture = [] }: Readonly<SolarpunkRoomProps>) {
+export default function SolarpunkRoom({
+  furniture = [],
+  onFurnitureMove,
+}: Readonly<SolarpunkRoomProps>) {
   const controls = useSceneControls();
+  const [isDraggingFurniture, setIsDraggingFurniture] = useState(false);
 
   return (
     <>
@@ -41,8 +46,12 @@ export default function SolarpunkRoom({ furniture = [] }: Readonly<SolarpunkRoom
           <RoomEnvironment />
         </Suspense>
 
-        {/* Phase 6 optimization: render furniture with one instanced draw call */}
-        <FurnitureInstances items={furniture} />
+        {/* Editable furniture placements */}
+        <EditableFurniture
+          items={furniture}
+          onMove={onFurnitureMove}
+          onDragStateChange={setIsDraggingFurniture}
+        />
 
         {/* Pixelated post-processing */}
         {controls.enablePixelation ? (
@@ -53,7 +62,8 @@ export default function SolarpunkRoom({ furniture = [] }: Readonly<SolarpunkRoom
 
         {/* Controls */}
         <OrbitControls
-          autoRotate={controls.autoRotate}
+          enabled={!isDraggingFurniture}
+          autoRotate={controls.autoRotate && !isDraggingFurniture}
           autoRotateSpeed={controls.autoRotateSpeed}
           enableZoom
           enablePan
