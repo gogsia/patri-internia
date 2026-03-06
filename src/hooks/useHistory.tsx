@@ -1,9 +1,14 @@
-import { useContext, createContext, useState, useCallback, ReactNode } from 'react';
+import { useContext, createContext, useState, useCallback, type ReactNode } from 'react';
 import type { FurnitureItem } from '@/types';
 
-interface HistoryState {
+type HistoryEntry = {
   furniture: FurnitureItem[];
-}
+};
+
+type HistoryData = {
+  entries: HistoryEntry[];
+  index: number;
+};
 
 interface HistoryContextValue {
   push: (state: FurnitureItem[]) => void;
@@ -15,34 +20,62 @@ interface HistoryContextValue {
 
 const HistoryContext = createContext<HistoryContextValue | null>(null);
 
-export function HistoryProvider({ children }: { children: ReactNode }) {
-  const [history, setHistory] = useState<HistoryState[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(-1);
+function cloneFurniture(items: FurnitureItem[]): FurnitureItem[] {
+  return JSON.parse(JSON.stringify(items)) as FurnitureItem[];
+}
+
+export function HistoryProvider({ children }: Readonly<{ children: ReactNode }>) {
+  const [history, setHistory] = useState<HistoryData>({ entries: [], index: -1 });
 
   const push = useCallback((furniture: FurnitureItem[]) => {
     setHistory((prev) => {
-      const newHistory = prev.slice(0, currentIndex + 1);
-      newHistory.push({ furniture: JSON.parse(JSON.stringify(furniture)) });
-      return newHistory.slice(-50); // Keep last 50 states
+      const snapshot = cloneFurniture(furniture);
+      const trimmed = prev.entries.slice(0, prev.index + 1);
+      const last = trimmed.at(-1);
+
+      if (last && JSON.stringify(last.furniture) === JSON.stringify(snapshot)) {
+        return prev;
+      }
+
+      const nextEntries = [...trimmed, { furniture: snapshot }].slice(-50);
+      return {
+        entries: nextEntries,
+        index: nextEntries.length - 1,
+      };
     });
-    setCurrentIndex((prev) => Math.min(prev + 1, 49));
-  }, [currentIndex]);
+  }, []);
 
   const undo = useCallback(() => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-      return JSON.parse(JSON.stringify(history[currentIndex - 1].furniture));
-    }
-    return null;
-  }, [currentIndex, history]);
+    let result: FurnitureItem[] | null = null;
+
+    setHistory((prev) => {
+      if (prev.index <= 0) {
+        return prev;
+      }
+
+      const nextIndex = prev.index - 1;
+      result = cloneFurniture(prev.entries[nextIndex].furniture);
+      return { ...prev, index: nextIndex };
+    });
+
+    return result;
+  }, []);
 
   const redo = useCallback(() => {
-    if (currentIndex < history.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-      return JSON.parse(JSON.stringify(history[currentIndex + 1].furniture));
-    }
-    return null;
-  }, [currentIndex, history]);
+    let result: FurnitureItem[] | null = null;
+
+    setHistory((prev) => {
+      if (prev.index >= prev.entries.length - 1) {
+        return prev;
+      }
+
+      const nextIndex = prev.index + 1;
+      result = cloneFurniture(prev.entries[nextIndex].furniture);
+      return { ...prev, index: nextIndex };
+    });
+
+    return result;
+  }, []);
 
   return (
     <HistoryContext.Provider
@@ -50,8 +83,8 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
         push,
         undo,
         redo,
-        canUndo: currentIndex > 0,
-        canRedo: currentIndex < history.length - 1,
+        canUndo: history.index > 0,
+        canRedo: history.index >= 0 && history.index < history.entries.length - 1,
       }}
     >
       {children}

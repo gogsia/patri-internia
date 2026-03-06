@@ -15,6 +15,7 @@ type SolarpunkRoomProps = {
   selectedId?: string | null;
   onSelectChange?: (id: string | null) => void;
   onFurnitureMove: (id: string, nextPosition: [number, number, number]) => void;
+  onFurnitureMoveEnd: (id: string, finalPosition: [number, number, number]) => void;
 };
 
 export default function SolarpunkRoom({
@@ -22,6 +23,7 @@ export default function SolarpunkRoom({
   selectedId = null,
   onSelectChange = () => {},
   onFurnitureMove,
+  onFurnitureMoveEnd,
 }: Readonly<SolarpunkRoomProps>) {
   const controls = useSceneControls();
   const [isDraggingFurniture, setIsDraggingFurniture] = useState(false);
@@ -36,7 +38,6 @@ export default function SolarpunkRoom({
       >
         <PerspectiveCamera makeDefault position={[0, 5, 12]} fov={50} />
 
-        {/* Lighting */}
         <ambientLight intensity={controls.ambientIntensity} color={controls.ambientColor} />
         <pointLight
           position={[10, 15, 10]}
@@ -45,28 +46,25 @@ export default function SolarpunkRoom({
         />
         <directionalLight position={[-10, 10, 5]} intensity={0.8} color="#ffffff" />
 
-        {/* Scene Content */}
         <Suspense fallback={null}>
           <RoomEnvironment />
         </Suspense>
 
-        {/* Editable furniture placements */}
         <EditableFurniture
           items={furniture}
           selectedId={selectedId}
           onSelectChange={onSelectChange}
           onMove={onFurnitureMove}
+          onMoveEnd={onFurnitureMoveEnd}
           onDragStateChange={setIsDraggingFurniture}
         />
 
-        {/* Pixelated post-processing */}
         {controls.enablePixelation ? (
           <EffectComposer>
             <Pixelation granularity={controls.pixelSize} />
           </EffectComposer>
         ) : null}
 
-        {/* Controls */}
         <OrbitControls
           enabled={!isDraggingFurniture}
           autoRotate={controls.autoRotate && !isDraggingFurniture}

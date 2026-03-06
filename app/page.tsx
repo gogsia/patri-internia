@@ -5,7 +5,7 @@ import FurniturePanel from '@/components/ui/FurniturePanel';
 import LayoutControls from '@/components/ui/LayoutControls';
 import Toolbar from '@/components/ui/Toolbar';
 import type { FurnitureItem, RoomLayout } from '@/types';
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useFurnitureKeyboard } from '@/hooks/useFurnitureKeyboard';
 import { useUndoRedo } from '@/hooks/useUndoRedo';
 import { HistoryProvider, useHistory } from '@/hooks/useHistory';
@@ -15,19 +15,24 @@ function HomeContent() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const history = useHistory();
 
-  useEffect(() => {
-    if (furniture.length > 0) {
-      history.push(furniture);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [furniture]);
+  const commitFurniture = useCallback(
+    (updater: (prev: FurnitureItem[]) => FurnitureItem[]) => {
+      setFurniture((prev) => {
+        const next = updater(prev);
+        history.push(next);
+        return next;
+      });
+    },
+    [history]
+  );
 
   useFurnitureKeyboard({
     onDelete: () => {
-      if (selectedId) {
-        setFurniture((prev) => prev.filter((item) => item.id !== selectedId));
-        setSelectedId(null);
+      if (!selectedId) {
+        return;
       }
+      commitFurniture((prev) => prev.filter((item) => item.id !== selectedId));
+      setSelectedId(null);
     },
     onDeselect: () => setSelectedId(null),
   });
@@ -52,7 +57,7 @@ function HomeContent() {
   const handleAddFurniture = (item: FurnitureItem) => {
     const randomX = Math.random() * 6 - 3;
     const randomZ = Math.random() * 6 - 3;
-    setFurniture((prev) => [
+    commitFurniture((prev) => [
       ...prev,
       {
         ...item,
@@ -64,12 +69,19 @@ function HomeContent() {
   };
 
   const handleLoadLayout = (layout: RoomLayout) => {
+    history.push(layout.furniture);
     setFurniture(layout.furniture);
   };
 
   const handleFurnitureMove = (id: string, nextPosition: [number, number, number]) => {
     setFurniture((prev) =>
       prev.map((item) => (item.id === id ? { ...item, position: nextPosition } : item))
+    );
+  };
+
+  const handleFurnitureMoveEnd = (id: string, finalPosition: [number, number, number]) => {
+    commitFurniture((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, position: finalPosition } : item))
     );
   };
 
@@ -80,6 +92,7 @@ function HomeContent() {
         selectedId={selectedId}
         onSelectChange={setSelectedId}
         onFurnitureMove={handleFurnitureMove}
+        onFurnitureMoveEnd={handleFurnitureMoveEnd}
       />
       <Toolbar
         selectedId={selectedId}
@@ -100,16 +113,17 @@ function HomeContent() {
           }
         }}
         onDelete={() => {
-          if (selectedId) {
-            setFurniture((prev) => prev.filter((item) => item.id !== selectedId));
-            setSelectedId(null);
+          if (!selectedId) {
+            return;
           }
+          commitFurniture((prev) => prev.filter((item) => item.id !== selectedId));
+          setSelectedId(null);
         }}
       />
       <FurniturePanel onAdd={handleAddFurniture} />
       <LayoutControls furniture={furniture} onLoad={handleLoadLayout} />
 
-      <div className="pointer-events-none absolute left-4 top-20 z-20 sm:top-4 sm:left-44">
+      <div className="pointer-events-none absolute left-4 top-20 z-20 sm:left-44 sm:top-4">
         <h1 className="text-2xl font-semibold tracking-tight text-[#7ddf64] sm:text-3xl">
           Solarpunk Interiors
         </h1>

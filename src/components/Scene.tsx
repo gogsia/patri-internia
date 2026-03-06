@@ -21,6 +21,7 @@ type SceneProps = {
   selectedId?: string | null;
   onSelectChange?: (id: string | null) => void;
   onFurnitureMove: (id: string, nextPosition: [number, number, number]) => void;
+  onFurnitureMoveEnd: (id: string, finalPosition: [number, number, number]) => void;
 };
 
 export default function Scene({
@@ -28,6 +29,7 @@ export default function Scene({
   selectedId = null,
   onSelectChange = () => {},
   onFurnitureMove,
+  onFurnitureMoveEnd,
 }: Readonly<SceneProps>) {
   return (
     <Suspense fallback={<div>Loading Scene...</div>}>
@@ -36,6 +38,7 @@ export default function Scene({
         selectedId={selectedId}
         onSelectChange={onSelectChange}
         onFurnitureMove={onFurnitureMove}
+        onFurnitureMoveEnd={onFurnitureMoveEnd}
       />
     </Suspense>
   );

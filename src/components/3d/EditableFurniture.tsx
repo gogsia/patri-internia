@@ -10,6 +10,7 @@ type EditableFurnitureProps = {
   selectedId: string | null;
   onSelectChange: (id: string | null) => void;
   onMove: (id: string, nextPosition: [number, number, number]) => void;
+  onMoveEnd: (id: string, finalPosition: [number, number, number]) => void;
   onDragStateChange: (dragging: boolean) => void;
 };
 
@@ -18,6 +19,7 @@ export default function EditableFurniture({
   selectedId,
   onSelectChange,
   onMove,
+  onMoveEnd,
   onDragStateChange,
 }: Readonly<EditableFurnitureProps>) {
   const [draggingId, setDraggingId] = useState<string | null>(null);
@@ -29,11 +31,7 @@ export default function EditableFurniture({
     setDraggingId(item.id);
     onDragStateChange(true);
 
-    dragOffset.current.set(
-      event.point.x - item.position[0],
-      0,
-      event.point.z - item.position[2]
-    );
+    dragOffset.current.set(event.point.x - item.position[0], 0, event.point.z - item.position[2]);
 
     const eventTarget = event.target as EventTarget | null;
     if (
@@ -62,6 +60,14 @@ export default function EditableFurniture({
     }
 
     event.stopPropagation();
+
+    const finalX = event.point.x - dragOffset.current.x;
+    const finalZ = event.point.z - dragOffset.current.z;
+    const finalPosition: [number, number, number] = [finalX, item.position[1], finalZ];
+
+    onMove(item.id, finalPosition);
+    onMoveEnd(item.id, finalPosition);
+
     setDraggingId(null);
     onDragStateChange(false);
 
