@@ -35,6 +35,8 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 MODEL = None
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 API_TOKEN = os.getenv("TRIPOSR_API_TOKEN", None)
+# Public base URL used in returned GLB links — override via env when running in Docker
+PUBLIC_BASE_URL = os.getenv("TRIPOSR_PUBLIC_URL", "http://127.0.0.1:8000")
 
 # RTX 2070 optimizations
 MAX_IMAGE_SIZE = 512  # Lower resolution for 8GB VRAM
@@ -165,8 +167,8 @@ async def convert_photo(
         # Generate 3D model
         generate_3d_model(image, output_file)
 
-        # Return URL to GLB file
-        glb_url = f"http://127.0.0.1:8000/output/{task_id}.glb"
+        # Return URL to GLB file (must be reachable from the user's browser)
+        glb_url = f"{PUBLIC_BASE_URL}/output/{task_id}.glb"
 
         return JSONResponse(
             {

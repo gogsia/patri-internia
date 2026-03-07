@@ -1,0 +1,57 @@
+services:
+
+  # ─── Next.js app ─────────────────────────────────────────────────────────────
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      # Bind-mount source for hot reload
+      - .:/app
+      # Keep node_modules from the container (avoid Windows path issues)
+      - /app/node_modules
+    environment:
+      # Server-side calls go through the internal Docker network
+      TRIPOSR_API_URL: http://triposr:8000
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+      # Uncomment to enable TripoSR auth token
+      # TRIPOSR_API_TOKEN: your_secret_token_here
+    depends_on:
+      - triposr
+    restart: unless-stopped
+
+  # ─── TripoSR photo-to-3D service ─────────────────────────────────────────────
+  triposr:
+    build:
+      context: ./triposr-service
+      dockerfile: Dockerfile
+    ports:
+      # Port 8000 exposed to host so the browser can fetch generated GLB files
+      - "8000:8000"
+    volumes:
+      # Persist generated GLB files across restarts
+      - triposr-output:/app/output
+      # Cache downloaded model weights (~1.5 GB, only downloaded once)
+      - triposr-model-cache:/root/.cache/huggingface
+    environment:
+      # GLB URLs returned to the browser must use localhost (host-exposed port)
+      TRIPOSR_PUBLIC_URL: http://localhost:8000
+      # Optional auth token — must match TRIPOSR_API_TOKEN in nextjs service
+      # TRIPOSR_API_TOKEN: your_secret_token_here
+    restart: unless-stopped
+    # ── GPU support (NVIDIA) ──────────────────────────────────────────────────
+    # Requires: Docker Desktop with WSL2 backend + NVIDIA Container Toolkit
+    # Comment out the `deploy` block if you don't have an NVIDIA GPU.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  triposr-output:
+  triposr-model-cache:
