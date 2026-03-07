@@ -1,0 +1,39 @@
+{
+  "id": "template-minimalist-reading-nook",
+  "name": "Minimalist Reading Nook",
+  "category": "minimalist",
+  "description": "Compact reading corner with clean spacing and soft lighting.",
+  "furniture": [
+    {
+      "id": "template-min-rn-chair-1",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [-0.9, 0, 0.4],
+      "rotation": [0, 0.75, 0],
+      "scale": 1,
+      "materialName": "livingBamboo"
+    },
+    {
+      "id": "template-min-rn-lamp-1",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [0.9, 0, 0.2],
+      "rotation": [0, -0.5, 0],
+      "scale": 1,
+      "materialName": "bioluminescent"
+    },
+    {
+      "id": "template-min-rn-plant-1",
+      "name": "🌿 Solar Succulent",
+      "modelPath": "/models/solarpunk-village.glb",
+      "position": [0, 0, -1.1],
+      "rotation": [0, 0, 0],
+      "scale": 0.95,
+      "materialName": "ecoWood"
+    }
+  ],
+  "lighting": {
+    "ambientIntensity": 0.58,
+    "pointIntensity": 1.4
+  }
+}

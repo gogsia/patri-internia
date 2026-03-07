@@ -1,0 +1,66 @@
+{
+  "id": "template-eclectic-night-market",
+  "name": "Eclectic Night Market",
+  "category": "eclectic",
+  "description": "Playful after-dark composition with glowing accents and contrast.",
+  "furniture": [
+    {
+      "id": "template-ecl-nm-panel-1",
+      "name": "⚡ Solar Panel Station",
+      "modelPath": "/models/solarpunk-building.glb",
+      "position": [0, 0, -1.8],
+      "rotation": [0, 3.14, 0],
+      "scale": 1,
+      "materialName": "smartGlass"
+    },
+    {
+      "id": "template-ecl-nm-table-1",
+      "name": "🪵 Work Table",
+      "modelPath": "/models/work-table.glb",
+      "position": [0, 0, 0.2],
+      "rotation": [0, 0.1, 0],
+      "scale": 1.05,
+      "materialName": "recycledMetal"
+    },
+    {
+      "id": "template-ecl-nm-chair-1",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [-1.3, 0, 0.8],
+      "rotation": [0, 1.0, 0],
+      "scale": 1,
+      "materialName": "techWood"
+    },
+    {
+      "id": "template-ecl-nm-chair-2",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [1.3, 0, 0.8],
+      "rotation": [0, -1.0, 0],
+      "scale": 1,
+      "materialName": "techWood"
+    },
+    {
+      "id": "template-ecl-nm-lamp-1",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [-2.0, 0, -1.4],
+      "rotation": [0, 0.4, 0],
+      "scale": 1.15,
+      "materialName": "neonMoss"
+    },
+    {
+      "id": "template-ecl-nm-lamp-2",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [2.0, 0, -1.4],
+      "rotation": [0, -0.4, 0],
+      "scale": 1.15,
+      "materialName": "crystalLight"
+    }
+  ],
+  "lighting": {
+    "ambientIntensity": 0.68,
+    "pointIntensity": 1.72
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "id": "template-eclectic-urban-oasis",
+  "name": "Eclectic Urban Oasis",
+  "category": "eclectic",
+  "description": "City-tech edges softened by organic growth and warm light.",
+  "furniture": [
+    {
+      "id": "template-ecl-uo-table-1",
+      "name": "🪵 Work Table",
+      "modelPath": "/models/work-table.glb",
+      "position": [0.4, 0, -0.1],
+      "rotation": [0, 0.15, 0],
+      "scale": 1,
+      "materialName": "techWood"
+    },
+    {
+      "id": "template-ecl-uo-chair-1",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [-1.2, 0, 0.5],
+      "rotation": [0, 0.9, 0],
+      "scale": 1,
+      "materialName": "livingBamboo"
+    },
+    {
+      "id": "template-ecl-uo-panel-1",
+      "name": "⚡ Solar Panel Station",
+      "modelPath": "/models/solarpunk-building.glb",
+      "position": [1.9, 0, -1.1],
+      "rotation": [0, 2.6, 0],
+      "scale": 0.95,
+      "materialName": "solarPanel"
+    },
+    {
+      "id": "template-ecl-uo-plant-1",
+      "name": "🌿 Solar Succulent",
+      "modelPath": "/models/solarpunk-village.glb",
+      "position": [-2.0, 0, -0.8],
+      "rotation": [0, 0.2, 0],
+      "scale": 1,
+      "materialName": "livingVine"
+    },
+    {
+      "id": "template-ecl-uo-lamp-1",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [1.6, 0, 1.5],
+      "rotation": [0, -0.7, 0],
+      "scale": 1,
+      "materialName": "crystalLight"
+    }
+  ],
+  "lighting": {
+    "ambientIntensity": 0.64,
+    "pointIntensity": 1.56
+  }
+}

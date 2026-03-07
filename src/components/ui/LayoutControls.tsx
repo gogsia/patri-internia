@@ -6,10 +6,17 @@ import type { FurnitureItem, RoomLayout } from '@/types';
 
 type LayoutControlsProps = {
   furniture: FurnitureItem[];
+  designerModelUrl?: string | null;
   onLoad: (layout: RoomLayout) => void;
+  onSaveSuccess?: () => void;
 };
 
-export default function LayoutControls({ furniture, onLoad }: Readonly<LayoutControlsProps>) {
+export default function LayoutControls({
+  furniture,
+  designerModelUrl,
+  onLoad,
+  onSaveSuccess,
+}: Readonly<LayoutControlsProps>) {
   const [layoutName, setLayoutName] = useState('');
   // Used only to force a re-render after save/delete operations.
   const [refreshKey, setRefreshKey] = useState(0);
@@ -23,6 +30,7 @@ export default function LayoutControls({ furniture, onLoad }: Readonly<LayoutCon
       name: layoutName.trim() || `Layout ${new Date().toLocaleTimeString()}`,
       timestamp: Date.now(),
       furniture,
+      designerModelUrl: designerModelUrl || undefined,
       lighting: {
         ambientIntensity: 0.6,
         pointIntensity: 1.5,
@@ -32,6 +40,7 @@ export default function LayoutControls({ furniture, onLoad }: Readonly<LayoutCon
     saveLayout(layout);
     setLayoutName('');
     setRefreshKey((v) => v + 1);
+    onSaveSuccess?.();
   };
 
   return (
@@ -39,7 +48,15 @@ export default function LayoutControls({ furniture, onLoad }: Readonly<LayoutCon
       key={refreshKey}
       className="absolute right-2 top-20 z-20 w-[min(18rem,48vw)] rounded-xl border border-[#355139] bg-black/40 p-3 backdrop-blur-sm sm:right-4 sm:w-72"
     >
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[#a8ef8b]">Layouts</h2>
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[#a8ef8b]">
+        Layouts
+      </h2>
+
+      {designerModelUrl && (
+        <div className="mb-3 rounded-md bg-emerald-500/10 border border-emerald-500/30 p-2 text-xs text-emerald-300">
+          ✓ Designer model loaded
+        </div>
+      )}
 
       <div className="mb-3 flex gap-2">
         <input

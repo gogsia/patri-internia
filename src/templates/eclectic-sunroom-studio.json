@@ -1,0 +1,57 @@
+{
+  "id": "template-eclectic-sunroom-studio",
+  "name": "Eclectic Sunroom Studio",
+  "category": "eclectic",
+  "description": "Creative lounge where daylight utility meets lush corners.",
+  "furniture": [
+    {
+      "id": "template-ecl-ss-chair-1",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [-1.0, 0, -0.3],
+      "rotation": [0, 0.45, 0],
+      "scale": 1,
+      "materialName": "coralStone"
+    },
+    {
+      "id": "template-ecl-ss-chair-2",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [1.1, 0, -0.2],
+      "rotation": [0, -0.45, 0],
+      "scale": 1,
+      "materialName": "bioPlastic"
+    },
+    {
+      "id": "template-ecl-ss-table-1",
+      "name": "🪵 Work Table",
+      "modelPath": "/models/work-table.glb",
+      "position": [0, 0, 1.0],
+      "rotation": [0, 0, 0],
+      "scale": 1,
+      "materialName": "greenConcrete"
+    },
+    {
+      "id": "template-ecl-ss-hydro-1",
+      "name": "🌱 Hydroponic Tower",
+      "modelPath": "/models/hydroponic-tower.glb",
+      "position": [-2.1, 0, 1.7],
+      "rotation": [0, 0.3, 0],
+      "scale": 1,
+      "materialName": "livingVine"
+    },
+    {
+      "id": "template-ecl-ss-lamp-1",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [2.0, 0, 1.8],
+      "rotation": [0, -0.6, 0],
+      "scale": 1,
+      "materialName": "bioluminescent"
+    }
+  ],
+  "lighting": {
+    "ambientIntensity": 0.67,
+    "pointIntensity": 1.6
+  }
+}

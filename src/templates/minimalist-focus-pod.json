@@ -1,0 +1,39 @@
+{
+  "id": "template-minimalist-focus-pod",
+  "name": "Minimalist Focus Pod",
+  "category": "minimalist",
+  "description": "A quiet workstation setup with low visual noise.",
+  "furniture": [
+    {
+      "id": "template-min-fp-table-1",
+      "name": "🪵 Work Table",
+      "modelPath": "/models/work-table.glb",
+      "position": [0, 0, -0.4],
+      "rotation": [0, 0, 0],
+      "scale": 0.95,
+      "materialName": "ecoWood"
+    },
+    {
+      "id": "template-min-fp-chair-1",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [0, 0, 1.0],
+      "rotation": [0, 3.14, 0],
+      "scale": 0.95,
+      "materialName": "myceliumFoam"
+    },
+    {
+      "id": "template-min-fp-lamp-1",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [-1.6, 0, -0.5],
+      "rotation": [0, 0.7, 0],
+      "scale": 0.95,
+      "materialName": "crystalLight"
+    }
+  ],
+  "lighting": {
+    "ambientIntensity": 0.6,
+    "pointIntensity": 1.42
+  }
+}

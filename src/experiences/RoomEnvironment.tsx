@@ -1,9 +1,8 @@
 'use client';
 
 import { MeshReflectorMaterial } from '@react-three/drei';
-import { useRef, Suspense } from 'react';
+import { useRef } from 'react';
 import * as THREE from 'three';
-import RoomModels from './RoomModels';
 
 export default function RoomEnvironment() {
   const floorRef = useRef<THREE.Mesh>(null);
@@ -59,10 +58,54 @@ export default function RoomEnvironment() {
         />
       </mesh>
 
-      {/* Room Models - Sketchfab GLTF imports */}
-      <Suspense fallback={null}>
-        <RoomModels />
-      </Suspense>
+      {/* Additional ambient decorations */}
+      {/* Corner accent light - Left back */}
+      <mesh position={[-8, 2, -7]}>
+        <sphereGeometry args={[0.5, 16, 16]} />
+        <meshStandardMaterial
+          color="#b6ff99"
+          emissive="#7ddf64"
+          emissiveIntensity={0.6}
+          transparent
+          opacity={0.8}
+        />
+      </mesh>
+
+      {/* Corner accent light - Right back */}
+      <mesh position={[8, 2, -7]}>
+        <sphereGeometry args={[0.5, 16, 16]} />
+        <meshStandardMaterial
+          color="#b6ff99"
+          emissive="#7ddf64"
+          emissiveIntensity={0.6}
+          transparent
+          opacity={0.8}
+        />
+      </mesh>
+
+      {/* Vertical grow lights on sides */}
+      <mesh position={[-9, 6, 0]} scale={[0.1, 3, 0.1]}>
+        <boxGeometry />
+        <meshStandardMaterial
+          color="#9aeb7f"
+          emissive="#7ddf64"
+          emissiveIntensity={0.4}
+          metalness={0.6}
+          roughness={0.3}
+        />
+      </mesh>
+
+      <mesh position={[9, 6, 0]} scale={[0.1, 3, 0.1]}>
+        <boxGeometry />
+        <meshStandardMaterial
+          color="#9aeb7f"
+          emissive="#7ddf64"
+          emissiveIntensity={0.4}
+          metalness={0.6}
+          roughness={0.3}
+        />
+      </mesh>
+
     </group>
   );
 }

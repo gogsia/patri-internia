@@ -1,12 +1,7 @@
-import type { Metadata } from "next";
-import "./globals.css";
+'use client';
 
-export const metadata: Metadata = {
-  title: "Solarpunk Interiors | 3D Design Explorer",
-  description:
-    "Immersive 3D solarpunk interior design platform with godlike orbital navigation",
-  keywords: "solarpunk, interior design, 3D, eco-futurism, interactive",
-};
+import './globals.css';
+import { HistoryProvider } from '@/hooks/useHistory';
 
 export default function RootLayout({
   children,
@@ -15,7 +10,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-gray-900 text-gray-100">{children}</body>
+      <head>
+        <title>Solarpunk Interiors | 3D Design Explorer</title>
+        <meta
+          name="description"
+          content="Immersive 3D solarpunk interior design platform with godlike orbital navigation"
+        />
+        <meta
+          name="keywords"
+          content="solarpunk, interior design, 3D, eco-futurism, interactive"
+        />
+      </head>
+      <body className="bg-gray-900 text-gray-100">
+        <HistoryProvider>{children}</HistoryProvider>
+      </body>
     </html>
   );
 }

@@ -12,5 +12,6 @@ export function useSceneControls() {
     autoRotateSpeed: { value: 2, min: 0, max: 8, step: 0.25 },
     enablePixelation: true,
     pixelSize: { value: 6, min: 1, max: 16, step: 1 },
+    showGrid: { value: true, label: 'Floor Grid' },
   });
 }

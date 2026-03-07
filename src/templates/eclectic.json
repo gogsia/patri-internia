@@ -1,0 +1,57 @@
+{
+  "id": "template-eclectic-remix",
+  "name": "Eclectic Remix",
+  "category": "eclectic",
+  "description": "Balanced mix of organic, industrial, and luminous statement pieces.",
+  "furniture": [
+    {
+      "id": "template-ecl-table-1",
+      "name": "🪵 Work Table",
+      "modelPath": "/models/work-table.glb",
+      "position": [0, 0, 0.2],
+      "rotation": [0, -0.15, 0],
+      "scale": 1,
+      "materialName": "greenConcrete"
+    },
+    {
+      "id": "template-ecl-chair-1",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [-1.2, 0, 0.6],
+      "rotation": [0, 0.7, 0],
+      "scale": 1,
+      "materialName": "recycledMetal"
+    },
+    {
+      "id": "template-ecl-panel-1",
+      "name": "⚡ Solar Panel Station",
+      "modelPath": "/models/solarpunk-building.glb",
+      "position": [1.8, 0, -0.5],
+      "rotation": [0, 1.8, 0],
+      "scale": 1,
+      "materialName": "smartGlass"
+    },
+    {
+      "id": "template-ecl-hydro-1",
+      "name": "🌱 Hydroponic Tower",
+      "modelPath": "/models/hydroponic-tower.glb",
+      "position": [-2.0, 0, -1.1],
+      "rotation": [0, 0.5, 0],
+      "scale": 1.05,
+      "materialName": "livingVine"
+    },
+    {
+      "id": "template-ecl-lamp-1",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [2.0, 0, 1.3],
+      "rotation": [0, -0.6, 0],
+      "scale": 1,
+      "materialName": "bioluminescent"
+    }
+  ],
+  "lighting": {
+    "ambientIntensity": 0.66,
+    "pointIntensity": 1.58
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "id": "template-maximalist-maker-hub",
+  "name": "Maximalist Maker Hub",
+  "category": "maximalist",
+  "description": "Workshop-like setup packed with utility and bright accents.",
+  "furniture": [
+    {
+      "id": "template-max-mh-table-1",
+      "name": "🪵 Work Table",
+      "modelPath": "/models/work-table.glb",
+      "position": [-0.8, 0, 0],
+      "rotation": [0, 0.12, 0],
+      "scale": 1.05,
+      "materialName": "greenConcrete"
+    },
+    {
+      "id": "template-max-mh-table-2",
+      "name": "🪵 Work Table",
+      "modelPath": "/models/work-table.glb",
+      "position": [1.2, 0, -0.2],
+      "rotation": [0, -0.2, 0],
+      "scale": 1.05,
+      "materialName": "recycledMetal"
+    },
+    {
+      "id": "template-max-mh-chair-1",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [-1.9, 0, 0.8],
+      "rotation": [0, 1.0, 0],
+      "scale": 1,
+      "materialName": "techWood"
+    },
+    {
+      "id": "template-max-mh-chair-2",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [2.2, 0, 0.5],
+      "rotation": [0, -1.1, 0],
+      "scale": 1,
+      "materialName": "techWood"
+    },
+    {
+      "id": "template-max-mh-panel-1",
+      "name": "⚡ Solar Panel Station",
+      "modelPath": "/models/solarpunk-building.glb",
+      "position": [0, 0, -2.0],
+      "rotation": [0, 3.14, 0],
+      "scale": 1,
+      "materialName": "smartGlass"
+    },
+    {
+      "id": "template-max-mh-lamp-1",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [-2.4, 0, -0.9],
+      "rotation": [0, 0.3, 0],
+      "scale": 1,
+      "materialName": "bioluminescent"
+    },
+    {
+      "id": "template-max-mh-lamp-2",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [2.5, 0, -0.8],
+      "rotation": [0, -0.3, 0],
+      "scale": 1,
+      "materialName": "neonMoss"
+    }
+  ],
+  "lighting": {
+    "ambientIntensity": 0.7,
+    "pointIntensity": 1.68
+  }
+}

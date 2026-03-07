@@ -1,0 +1,84 @@
+{
+  "id": "template-maximalist-biophilic-lab",
+  "name": "Maximalist Biophilic Lab",
+  "category": "maximalist",
+  "description": "Dense plant-tech composition with layered focal points.",
+  "furniture": [
+    {
+      "id": "template-max-bl-table-1",
+      "name": "🪵 Work Table",
+      "modelPath": "/models/work-table.glb",
+      "position": [0, 0, 0],
+      "rotation": [0, 0.2, 0],
+      "scale": 1.1,
+      "materialName": "techWood"
+    },
+    {
+      "id": "template-max-bl-chair-1",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [-1.5, 0, 0.5],
+      "rotation": [0, 0.8, 0],
+      "scale": 1.05,
+      "materialName": "bioPlastic"
+    },
+    {
+      "id": "template-max-bl-chair-2",
+      "name": "🪑 Eco Chair",
+      "modelPath": "/models/eco-chair.glb",
+      "position": [1.4, 0, 0.4],
+      "rotation": [0, -0.8, 0],
+      "scale": 1.05,
+      "materialName": "bioPlastic"
+    },
+    {
+      "id": "template-max-bl-hydro-1",
+      "name": "🌱 Hydroponic Tower",
+      "modelPath": "/models/hydroponic-tower.glb",
+      "position": [-2.2, 0, -1.5],
+      "rotation": [0, 0.4, 0],
+      "scale": 1.1,
+      "materialName": "livingVine"
+    },
+    {
+      "id": "template-max-bl-hydro-2",
+      "name": "🌱 Hydroponic Tower",
+      "modelPath": "/models/hydroponic-tower.glb",
+      "position": [2.2, 0, -1.3],
+      "rotation": [0, -0.4, 0],
+      "scale": 1.1,
+      "materialName": "livingVine"
+    },
+    {
+      "id": "template-max-bl-panel-1",
+      "name": "⚡ Solar Panel Station",
+      "modelPath": "/models/solarpunk-building.glb",
+      "position": [0, 0, -2.1],
+      "rotation": [0, 3.14, 0],
+      "scale": 1,
+      "materialName": "solarPanel"
+    },
+    {
+      "id": "template-max-bl-lamp-1",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [-2.2, 0, 1.6],
+      "rotation": [0, 0.2, 0],
+      "scale": 1.15,
+      "materialName": "neonMoss"
+    },
+    {
+      "id": "template-max-bl-lamp-2",
+      "name": "💡 Bio Lamp",
+      "modelPath": "/models/bio-lamp.glb",
+      "position": [2.3, 0, 1.6],
+      "rotation": [0, -0.2, 0],
+      "scale": 1.15,
+      "materialName": "crystalLight"
+    }
+  ],
+  "lighting": {
+    "ambientIntensity": 0.74,
+    "pointIntensity": 1.7
+  }
+}
