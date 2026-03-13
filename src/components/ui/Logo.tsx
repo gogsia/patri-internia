@@ -2,7 +2,7 @@
 
 export default function Logo() {
   return (
-    <div className="absolute right-4 top-4 z-30 select-none">
+    <div className="absolute left-1/2 top-3 z-30 -translate-x-1/2 select-none">
       <a
         href="/"
         className="group flex items-center gap-2 rounded-xl border border-[#355139] bg-black/50 px-4 py-2 backdrop-blur-sm transition hover:bg-black/60"
