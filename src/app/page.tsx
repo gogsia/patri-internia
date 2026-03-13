@@ -26,8 +26,20 @@ import {
   cloneTemplateFurniture,
   remixFurniture,
 } from '@/lib/layoutTemplates';
+import {
+  encodeSceneToUrl,
+  decodeSceneFromUrl,
+  exportSceneJson,
+  importSceneJson,
+} from '@/lib/share';
+import { sceneStore } from '@/lib/sceneStore';
 import { getFurnitureCategory, type ColorScheme } from '@/lib/colorSchemes';
-import type { FurnitureItem, LayoutTemplate, RoomLayout } from '@/types';
+import type {
+  FurnitureItem,
+  LayoutTemplate,
+  RoomLayout,
+  TemplateCategory,
+} from '@/types';
 
 export default function Home() {
   const [furniture, setFurniture] = useState<FurnitureItem[]>([]);
@@ -136,11 +148,25 @@ export default function Home() {
   // Move furniture handler (during drag)
   const handleFurnitureMove = useCallback(
     (id: string, nextPosition: [number, number, number]) => {
-      setFurniture((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, position: nextPosition } : item
-        )
-      );
+      // During drag, defer history commits until move end to avoid flooding snapshots.
+      skipHistoryRef.current = true;
+      setFurniture((prev) => {
+        let changed = false;
+        const next = prev.map((item) => {
+          if (item.id !== id) return item;
+          const [x, y, z] = item.position;
+          if (
+            x === nextPosition[0] &&
+            y === nextPosition[1] &&
+            z === nextPosition[2]
+          ) {
+            return item;
+          }
+          changed = true;
+          return { ...item, position: nextPosition };
+        });
+        return changed ? next : prev;
+      });
     },
     []
   );
@@ -148,13 +174,32 @@ export default function Home() {
   // Move end handler (after drag completes)
   const handleFurnitureMoveEnd = useCallback(
     (id: string, finalPosition: [number, number, number]) => {
-      setFurniture((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, position: finalPosition } : item
-        )
-      );
+      let committedState: FurnitureItem[] | null = null;
+      setFurniture((prev) => {
+        let changed = false;
+        const next = prev.map((item) => {
+          if (item.id !== id) return item;
+          const [x, y, z] = item.position;
+          if (
+            x === finalPosition[0] &&
+            y === finalPosition[1] &&
+            z === finalPosition[2]
+          ) {
+            return item;
+          }
+          changed = true;
+          return { ...item, position: finalPosition };
+        });
+        if (changed) {
+          committedState = next;
+        }
+        return changed ? next : prev;
+      });
+
+      skipHistoryRef.current = false;
+      history.push(committedState ?? furnitureRef.current);
     },
-    []
+    [history]
   );
 
   // Load layout from storage
@@ -163,6 +208,13 @@ export default function Home() {
       setFurniture(layout.furniture);
       setDesignerModelUrl(layout.designerModelUrl || null);
       setSelectedId(null);
+      sceneStore.set(
+        {
+          ambientIntensity: layout.lighting.ambientIntensity,
+          pointLightIntensity: layout.lighting.pointIntensity,
+        },
+        false
+      );
       toast.success(`Loaded layout: ${layout.name}`);
     },
     [toast]
@@ -197,7 +249,9 @@ export default function Home() {
     (direction: 'up' | 'down' | 'left' | 'right') => {
       if (!selectedId) return;
 
-      const selected = furnitureRef.current.find((item) => item.id === selectedId);
+      const selected = furnitureRef.current.find(
+        (item) => item.id === selectedId
+      );
       if (!selected) return;
 
       skipHistoryRef.current = true;
@@ -221,9 +275,18 @@ export default function Home() {
       }
 
       setFurniture((prev) =>
-        prev.map((item) =>
-          item.id === selectedId ? { ...item, position: newPosition } : item
-        )
+        prev.map((item) => {
+          if (item.id !== selectedId) return item;
+          const [x, y, z] = item.position;
+          if (
+            x === newPosition[0] &&
+            y === newPosition[1] &&
+            z === newPosition[2]
+          ) {
+            return item;
+          }
+          return { ...item, position: newPosition };
+        })
       );
     },
     [selectedId]
@@ -244,7 +307,7 @@ export default function Home() {
       if (!selected) return;
 
       const rotationAmount = Math.PI / 12; // 15 degrees in radians
-      let newRotation: [number, number, number] = [...selected.rotation];
+      const newRotation: [number, number, number] = [...selected.rotation];
 
       // Rotate around Y-axis (vertical rotation)
       if (direction === 'clockwise') {
@@ -287,8 +350,8 @@ export default function Home() {
 
   // Save current layout as custom template
   const handleSaveTemplate = useCallback(
-    (name: string, description: string, category: any) => {
-      const template = saveTemplate(name, description, category, furniture);
+    (name: string, description: string, category: TemplateCategory) => {
+      saveTemplate(name, description, category, furniture);
       setShowSaveTemplateModal(false);
       toast.success(`Template saved: ${name}`);
     },
@@ -324,6 +387,50 @@ export default function Home() {
     },
     [furniture, toast]
   );
+
+  // Load scene from URL on first render
+  useEffect(() => {
+    const fromUrl = decodeSceneFromUrl();
+    if (fromUrl && fromUrl.length > 0) {
+      setFurniture(fromUrl);
+      toast.success('Layout loaded from shared link');
+    }
+    // Only run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Copy shareable URL (with encoded scene state) to clipboard
+  const handleCopyLink = useCallback(() => {
+    const url = encodeSceneToUrl(furnitureRef.current);
+    navigator.clipboard.writeText(url).then(
+      () => toast.success('Link copied to clipboard'),
+      () => toast.success('Copy failed — check browser permissions')
+    );
+  }, [toast]);
+
+  // Export current scene as a JSON file download
+  const handleExportJson = useCallback(() => {
+    if (furnitureRef.current.length === 0) {
+      toast.success('Nothing to export — add some furniture first');
+      return;
+    }
+    exportSceneJson(furnitureRef.current);
+    toast.success('Layout exported as JSON');
+  }, [toast]);
+
+  // Import scene from a user-selected JSON file
+  const handleImportJson = useCallback(async () => {
+    const items = await importSceneJson();
+    if (!items) {
+      toast.success('Import failed — invalid or empty file');
+      return;
+    }
+    setFurniture(items);
+    setSelectedId(null);
+    toast.success(
+      `Imported ${items.length} furniture item${items.length === 1 ? '' : 's'}`
+    );
+  }, [toast]);
 
   // Keyboard shortcuts
   useUndoRedo({ onUndo: handleUndo, onRedo: handleRedo });
@@ -375,6 +482,9 @@ export default function Home() {
         onClear={handleClear}
         onMaterialPicker={materialPicker.openPicker}
         onSaveTemplate={() => setShowSaveTemplateModal(true)}
+        onCopyLink={handleCopyLink}
+        onExportJson={handleExportJson}
+        onImportJson={handleImportJson}
       />
 
       <FurniturePanel onAdd={handleAddFurniture} />

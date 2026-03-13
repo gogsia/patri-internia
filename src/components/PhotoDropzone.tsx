@@ -17,12 +17,12 @@ export default function PhotoDropzone({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const previewObjectUrlRef = useRef<string | null>(null);
   const { convert, loading, error, glbUrl } = usePhotoTo3D();
 
   // Simulate progress during conversion
   useEffect(() => {
     if (loading) {
-      setProgress(0);
       const interval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 90) return prev;
@@ -30,10 +30,18 @@ export default function PhotoDropzone({
         });
       }, 800);
       return () => clearInterval(interval);
-    } else if (glbUrl) {
-      setProgress(100);
     }
   }, [loading, glbUrl]);
+
+  const displayProgress = glbUrl ? 100 : progress;
+
+  useEffect(() => {
+    return () => {
+      if (previewObjectUrlRef.current) {
+        URL.revokeObjectURL(previewObjectUrlRef.current);
+      }
+    };
+  }, []);
 
   const processFile = useCallback(
     async (file: File) => {
@@ -45,7 +53,14 @@ export default function PhotoDropzone({
         return;
       }
 
+      setProgress(0);
+
+      if (previewObjectUrlRef.current) {
+        URL.revokeObjectURL(previewObjectUrlRef.current);
+      }
+
       const objectUrl = URL.createObjectURL(file);
+      previewObjectUrlRef.current = objectUrl;
       setPreviewUrl(objectUrl);
 
       const result = await convert(file);
@@ -124,7 +139,7 @@ export default function PhotoDropzone({
                 <div className="text-center">
                   <div className="mx-auto mb-2 h-10 w-10 animate-spin rounded-full border-4 border-emerald-300 border-t-transparent"></div>
                   <p className="text-xs font-semibold text-emerald-200">
-                    {Math.round(progress)}% Converting...
+                    {Math.round(displayProgress)}% Converting...
                   </p>
                 </div>
               </div>

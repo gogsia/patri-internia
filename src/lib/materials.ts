@@ -19,7 +19,7 @@ export const SOLARPUNK_MATERIALS: Record<string, MaterialDefinition> = {
     description: 'Reclaimed sustainable wood with natural grain',
     material: new THREE.MeshStandardMaterial({
       color: 0x8b6f47,
-      metalness: 0.0,
+      metalness: 0,
       roughness: 0.85,
     }),
   },
@@ -55,8 +55,8 @@ export const SOLARPUNK_MATERIALS: Record<string, MaterialDefinition> = {
     description: 'Soft biodegradable fungal material',
     material: new THREE.MeshStandardMaterial({
       color: 0xf5ecd7,
-      metalness: 0.0,
-      roughness: 1.0,
+      metalness: 0,
+      roughness: 1,
     }),
   },
 
@@ -135,7 +135,7 @@ export const SOLARPUNK_MATERIALS: Record<string, MaterialDefinition> = {
       color: 0x4a7c59,
       emissive: 0x7ddf64,
       emissiveIntensity: 0.2,
-      metalness: 0.0,
+      metalness: 0,
       roughness: 0.7,
     }),
   },
@@ -164,7 +164,7 @@ export const SOLARPUNK_MATERIALS: Record<string, MaterialDefinition> = {
       color: 0x88ff88,
       emissive: 0x00ff00,
       emissiveIntensity: 0.8,
-      metalness: 0.0,
+      metalness: 0,
       roughness: 0.5,
     }),
   },
@@ -200,15 +200,15 @@ export const SOLARPUNK_MATERIALS: Record<string, MaterialDefinition> = {
   },
 };
 
-
-// Helper function to get material by name
+// Helper function to get material by name.
+// Returns a shared immutable definition for fast reads in render paths.
 export function getMaterialByName(name: string): THREE.MeshStandardMaterial {
   const materialDef = SOLARPUNK_MATERIALS[name];
   if (!materialDef) {
     // Return default material if not found
-    return SOLARPUNK_MATERIALS.ecoWood.material.clone();
+    return SOLARPUNK_MATERIALS.ecoWood.material;
   }
-  return materialDef.material.clone();
+  return materialDef.material;
 }
 
 // Helper function to get materials by category

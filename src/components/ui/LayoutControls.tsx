@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { getLayouts, removeLayout, saveLayout } from '@/lib/storage';
+import { useLayouts } from '@/hooks/useLayouts';
+import { sceneStore } from '@/lib/sceneStore';
 import type { FurnitureItem, RoomLayout } from '@/types';
 
 type LayoutControlsProps = {
@@ -18,10 +19,7 @@ export default function LayoutControls({
   onSaveSuccess,
 }: Readonly<LayoutControlsProps>) {
   const [layoutName, setLayoutName] = useState('');
-  // Used only to force a re-render after save/delete operations.
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const layouts = getLayouts();
+  const { layouts, save, remove } = useLayouts();
 
   const handleSave = () => {
     const id = String(Date.now());
@@ -32,22 +30,18 @@ export default function LayoutControls({
       furniture,
       designerModelUrl: designerModelUrl || undefined,
       lighting: {
-        ambientIntensity: 0.6,
-        pointIntensity: 1.5,
+        ambientIntensity: (sceneStore.get('ambientIntensity') as number) ?? 0.6,
+        pointIntensity: (sceneStore.get('pointLightIntensity') as number) ?? 1.5,
       },
     };
 
-    saveLayout(layout);
+    save(layout);
     setLayoutName('');
-    setRefreshKey((v) => v + 1);
     onSaveSuccess?.();
   };
 
   return (
-    <aside
-      key={refreshKey}
-      className="absolute right-2 top-20 z-20 w-[min(18rem,48vw)] rounded-xl border border-[#355139] bg-black/40 p-3 backdrop-blur-sm sm:right-4 sm:w-72"
-    >
+    <aside className="absolute right-2 top-20 z-20 w-[min(18rem,48vw)] rounded-xl border border-[#355139] bg-black/40 p-3 backdrop-blur-sm sm:right-4 sm:w-72">
       <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[#a8ef8b]">
         Layouts
       </h2>
@@ -91,10 +85,7 @@ export default function LayoutControls({
                   {layout.name}
                 </button>
                 <button
-                  onClick={() => {
-                    removeLayout(layout.id);
-                    setRefreshKey((v) => v + 1);
-                  }}
+                  onClick={() => remove(layout.id)}
                   aria-label={`Delete layout ${layout.name}`}
                   className="rounded-md border border-[#5d2f2f] bg-[#321717] px-2 py-1 text-xs text-zinc-200 hover:bg-[#4a1f1f]"
                 >

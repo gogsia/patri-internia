@@ -27,7 +27,7 @@ export function useCustomTemplates() {
       setIsLoaded(true);
     };
 
-    if (typeof window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       loadTemplates();
     }
   }, []);
@@ -54,35 +54,33 @@ export function useCustomTemplates() {
         },
       };
 
-      const updated = [...customTemplates, newTemplate];
-      setCustomTemplates(updated);
-
-      // Persist to localStorage
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      } catch (error) {
-        console.error('Failed to save custom template:', error);
-      }
+      setCustomTemplates((prev) => {
+        const updated = [...prev, newTemplate];
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        } catch (error) {
+          console.error('Failed to save custom template:', error);
+        }
+        return updated;
+      });
 
       return newTemplate;
     },
-    [customTemplates]
+    []
   );
 
   // Delete a custom template
-  const deleteTemplate = useCallback(
-    (templateId: string) => {
-      const updated = customTemplates.filter((t) => t.id !== templateId);
-      setCustomTemplates(updated);
-
+  const deleteTemplate = useCallback((templateId: string) => {
+    setCustomTemplates((prev) => {
+      const updated = prev.filter((t) => t.id !== templateId);
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch (error) {
         console.error('Failed to delete custom template:', error);
       }
-    },
-    [customTemplates]
-  );
+      return updated;
+    });
+  }, []);
 
   // Clear all custom templates
   const clearAllTemplates = useCallback(() => {

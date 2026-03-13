@@ -1,6 +1,6 @@
 # 🌿 Solarpunk Interiors
 
-**3D Immersive Interior Design Explorer**
+## 3D Immersive Interior Design Explorer
 
 An interactive 3D furniture placement application with a solarpunk aesthetic. Design eco-futuristic interior spaces with intuitive drag-and-drop controls, real-time 3D rendering, and persistent layout storage.
 
@@ -9,12 +9,14 @@ An interactive 3D furniture placement application with a solarpunk aesthetic. De
 ## ✨ Features
 
 ### 🎨 3D Scene
+
 - **Orbital Camera Controls**: Drag to rotate, scroll to zoom, right-drag to pan
 - **Dynamic Lighting**: Adjustable ambient, point, and directional lights via Leva GUI
 - **Post-Processing Effects**: Optional pixelation shader for retro aesthetic
 - **Responsive Controls**: Smooth camera interaction with min/max zoom limits
 
 ### 🪑 Furniture Management
+
 - **Library Panel**: Browse and add furniture items (Solar Succulent, Solar Panel Station, Hydroponic Tower)
 - **Drag & Drop**: Intuitive 3D furniture placement by clicking and dragging
 - **Selection System**: Click to select furniture with visual feedback
@@ -22,23 +24,27 @@ An interactive 3D furniture placement application with a solarpunk aesthetic. De
 - **Keyboard Shortcuts**: Fast editing with Delete, Ctrl+D, and Esc keys
 
 ### 🔄 History System
+
 - **Undo/Redo**: Full-featured history tracking (50-state buffer)
 - **Keyboard Shortcuts**: Ctrl+Z to undo, Ctrl+Y to redo
 - **Visual Indicators**: Toolbar shows when undo/redo actions are available
 - **Smart State Management**: Automatic history snapshots on furniture changes
 
 ### 💾 Layout Persistence
+
 - **Save Layouts**: Name and store your furniture arrangements
 - **Load Instantly**: Restore saved layouts with one click
 - **Browser Storage**: Uses localStorage for client-side persistence
 - **Manage Library**: Delete unwanted saved layouts
 
 ### 📸 Export & Share
+
 - **Screenshots**: Capture canvas as downloadable image
 - **Share Designs**: Share button for distribution
 - **Help System**: Toggle instructions panel
 
 ### 🖼️ Photo-to-3D Conversion (NEW)
+
 - **Designer Reality Mixer**: Upload interior photos and convert them to 3D models
 - **Local Processing**: Uses TripoSR on your GPU (RTX 2070 8GB optimized)
 - **Instant Integration**: Converted models appear directly in your scene
@@ -47,6 +53,7 @@ An interactive 3D furniture placement application with a solarpunk aesthetic. De
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 20+ (recommended)
 - npm, yarn, pnpm, or bun
 - **For Photo-to-3D**: Python 3.9+, CUDA-capable GPU (RTX 2070 or better)
@@ -107,6 +114,7 @@ npm run lint    # Run ESLint
 ## 🎮 Controls
 
 ### Mouse
+
 - **Left Drag**: Rotate camera around scene
 - **Right Drag**: Pan camera horizontally/vertically
 - **Scroll**: Zoom in/out
@@ -115,6 +123,7 @@ npm run lint    # Run ESLint
 - **Import Photo Button**: Open photo upload dialog
 
 ### Keyboard
+
 - `Ctrl+Z`: Undo last action
 - `Ctrl+Y` or `Ctrl+Shift+Z`: Redo action
 - `Delete`: Delete selected furniture
@@ -125,6 +134,7 @@ npm run lint    # Run ESLint
 - `+/-`: Scale furniture (10% increments)
 
 ### Photo Import
+
 - Drag and drop images directly onto the import dialog
 - Supports JPG, PNG (max 4MB)
 - Processing takes 10-20 seconds on RTX 2070
@@ -132,22 +142,26 @@ npm run lint    # Run ESLint
 ## 🛠️ Technology Stack
 
 ### Frontend
+
 - **Next.js 16**: React framework with Turbopack
 - **React 19**: Latest UI library
 - **TypeScript 5**: Type-safe development
 - **Tailwind CSS 4**: Utility-first styling
 
 ### 3D Rendering
+
 - **Three.js 0.183**: 3D engine
 - **React Three Fiber 9**: React renderer for Three.js
 - **React Three Drei 10**: Useful Three.js helpers
 - **React Three Postprocessing**: Visual effects
 
 ### Developer Tools
+
 - **Leva**: GUI controls for scene parameters
 - **ESLint**: Code quality and consistency
 
 ### AI/3D Processing
+
 - **TripoSR**: Stability AI's single-image 3D reconstruction
 - **FastAPI**: Python service backend
 - **PyTorch**: ML framework for 3D generation
@@ -155,7 +169,7 @@ npm run lint    # Run ESLint
 
 ## 🏗️ Architecture
 
-```
+```text
 src/
 ├── app/
 │   ├── layout.tsx          # Root layout with HistoryProvider
@@ -222,16 +236,20 @@ Place `.glb` or `.gltf` files in `/public/models/` and reference them in `src/li
 ## 🎨 Customization
 
 ### Adjust Scene Lighting
+
 Use the Leva GUI (top-right panel) to adjust:
+
 - Ambient light intensity & color
 - Point light intensity & color
 - Auto-rotation speed
 - Pixelation effect intensity
 
 ### Modify Furniture Library
+
 Edit `src/lib/furnitureLibrary.ts` to add/remove furniture items.
 
 ### Change Color Scheme
+
 Update Tailwind colors in `src/app/globals.css` and component class names.
 
 ## 🚧 Future Enhancements
@@ -253,11 +271,13 @@ Update Tailwind colors in `src/app/globals.css` and component class names.
 ### Photo Import Not Working
 
 1. Check TripoSR service is running:
+
    ```bash
    curl http://127.0.0.1:8000/health
    ```
 
 2. Verify `.env.local` has:
+
    ```env
    TRIPOSR_API_URL=http://127.0.0.1:8000
    ```
@@ -269,6 +289,7 @@ Update Tailwind colors in `src/app/globals.css` and component class names.
 If you get GPU memory errors:
 
 1. Edit `triposr-service/server.py`:
+
    ```python
    MAX_IMAGE_SIZE = 384  # Lower from 512
    ```

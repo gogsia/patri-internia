@@ -5,7 +5,7 @@ const TRIPOSR_API_TOKEN = process.env.TRIPOSR_API_TOKEN;
 
 const MAX_FILE_SIZE_BYTES = 4 * 1024 * 1024;
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 function validatePhoto(
   photo: unknown

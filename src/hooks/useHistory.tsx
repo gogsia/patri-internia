@@ -10,6 +10,7 @@ import type { FurnitureItem } from '@/types';
 
 type HistoryEntry = {
   furniture: FurnitureItem[];
+  signature: string;
 };
 
 type HistoryData = {
@@ -28,26 +29,55 @@ interface HistoryContextValue {
 const HistoryContext = createContext<HistoryContextValue | null>(null);
 
 function cloneFurniture(items: FurnitureItem[]): FurnitureItem[] {
-  return structuredClone(items);
+  return items.map((item) => ({
+    ...item,
+    position: [...item.position] as [number, number, number],
+    rotation: [...item.rotation] as [number, number, number],
+  }));
 }
 
-export function HistoryProvider({ children }: Readonly<{ children: ReactNode }>) {
+function getFurnitureSignature(items: FurnitureItem[]): string {
+  return items
+    .map((item) => {
+      const type = item.type ?? '';
+      const material = item.materialName ?? '';
+      return [
+        item.id,
+        item.name,
+        type,
+        item.modelPath,
+        item.scale,
+        material,
+        item.position.join(','),
+        item.rotation.join(','),
+      ].join('~');
+    })
+    .join('|');
+}
+
+export function HistoryProvider({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   const [history, setHistory] = useState<HistoryData>({
-    entries: [{ furniture: [] }],
+    entries: [{ furniture: [], signature: '' }],
     index: 0,
   });
 
   const push = useCallback((furniture: FurnitureItem[]) => {
     setHistory((prev) => {
-      const snapshot = cloneFurniture(furniture);
+      const signature = getFurnitureSignature(furniture);
       const trimmed = prev.entries.slice(0, prev.index + 1);
       const last = trimmed.at(-1);
 
-      if (last && JSON.stringify(last.furniture) === JSON.stringify(snapshot)) {
+      if (last?.signature === signature) {
         return prev;
       }
 
-      const nextEntries = [...trimmed, { furniture: snapshot }].slice(-50);
+      const snapshot = cloneFurniture(furniture);
+      const nextEntries = [
+        ...trimmed,
+        { furniture: snapshot, signature },
+      ].slice(-50);
       return {
         entries: nextEntries,
         index: nextEntries.length - 1,
@@ -98,7 +128,9 @@ export function HistoryProvider({ children }: Readonly<{ children: ReactNode }>)
     [push, undo, redo, history.index, history.entries.length]
   );
 
-  return <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>;
+  return (
+    <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>
+  );
 }
 
 export function useHistory() {

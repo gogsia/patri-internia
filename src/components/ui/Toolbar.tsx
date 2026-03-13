@@ -16,6 +16,9 @@ type ToolbarProps = {
   onClear?: () => void;
   onMaterialPicker?: () => void;
   onSaveTemplate?: () => void;
+  onCopyLink?: () => void;
+  onExportJson?: () => void;
+  onImportJson?: () => void;
 };
 
 export default function Toolbar({
@@ -31,6 +34,9 @@ export default function Toolbar({
   onClear = () => {},
   onMaterialPicker = () => {},
   onSaveTemplate = () => {},
+  onCopyLink = () => {},
+  onExportJson = () => {},
+  onImportJson = () => {},
 }: Readonly<ToolbarProps>) {
   const [showHelp, setShowHelp] = useState(false);
 
@@ -127,6 +133,33 @@ export default function Toolbar({
           className="rounded-md bg-[#7ddf64] px-3 py-2 text-xs font-semibold text-[#0f1713] hover:brightness-95"
         >
           Share
+        </button>
+        <button
+          type="button"
+          onClick={onCopyLink}
+          aria-label="Copy shareable link to clipboard"
+          className="rounded-md border border-[#314a35] bg-[#16241a] px-3 py-2 text-xs font-semibold text-zinc-100 hover:bg-[#1e3224]"
+        >
+          Copy Link
+        </button>
+
+        <div className="w-px bg-[#314a35]"></div>
+
+        <button
+          type="button"
+          onClick={onExportJson}
+          aria-label="Export layout as JSON file"
+          className="rounded-md border border-[#314a35] bg-[#16241a] px-3 py-2 text-xs font-semibold text-zinc-100 hover:bg-[#1e3224]"
+        >
+          Export
+        </button>
+        <button
+          type="button"
+          onClick={onImportJson}
+          aria-label="Import layout from JSON file"
+          className="rounded-md border border-[#314a35] bg-[#16241a] px-3 py-2 text-xs font-semibold text-zinc-100 hover:bg-[#1e3224]"
+        >
+          Import
         </button>
 
         <div className="w-px bg-[#314a35]"></div>

@@ -3,7 +3,29 @@ import { NextRequest, NextResponse } from 'next/server';
 const TRIPOSR_API_URL = process.env.TRIPOSR_API_URL;
 const TRIPOSR_API_TOKEN = process.env.TRIPOSR_API_TOKEN;
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
+
+function getAllowedOrigin(baseUrl: string): string | null {
+  try {
+    return new URL(baseUrl).origin;
+  } catch {
+    return null;
+  }
+}
+
+function isAllowedStatusUrl(candidate: string, baseUrl: string): boolean {
+  const allowedOrigin = getAllowedOrigin(baseUrl);
+  if (!allowedOrigin) {
+    return false;
+  }
+
+  try {
+    const parsed = new URL(candidate);
+    return parsed.origin === allowedOrigin;
+  } catch {
+    return false;
+  }
+}
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -21,10 +43,10 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  // Validate that the status URL is on the expected TripoSR host to prevent SSRF
-  if (TRIPOSR_API_URL && !resolvedUrl.startsWith(TRIPOSR_API_URL)) {
+  // Validate that the status URL stays on the configured TripoSR origin.
+  if (TRIPOSR_API_URL && !isAllowedStatusUrl(resolvedUrl, TRIPOSR_API_URL)) {
     return NextResponse.json(
-      { error: 'statusUrl host does not match configured TRIPOSR_API_URL.' },
+      { error: 'statusUrl origin does not match configured TRIPOSR_API_URL.' },
       { status: 400 }
     );
   }
@@ -51,7 +73,10 @@ export async function GET(req: NextRequest) {
     };
 
     if (data.status === 'FAILED') {
-      return NextResponse.json({ status: 'FAILED', error: 'TripoSR conversion failed.' });
+      return NextResponse.json({
+        status: 'FAILED',
+        error: 'TripoSR conversion failed.',
+      });
     }
 
     const glbUrl = data.glbUrl ?? data.output?.glbUrl;

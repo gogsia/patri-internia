@@ -3,9 +3,10 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { EffectComposer, Pixelation } from '@react-three/postprocessing';
-import { Leva } from 'leva';
+import { LevaPanel } from 'leva';
 import { Suspense, useState } from 'react';
 import { useSceneControls } from '@/components/leva/SceneControls';
+import { sceneStore } from '@/lib/sceneStore';
 import EditableFurniture from '@/components/3d/EditableFurniture';
 import DesignerModel from '@/components/3d/DesignerModel';
 import FloorGrid from '@/components/3d/FloorGrid';
@@ -47,7 +48,7 @@ export default function SolarpunkRoom({
 
   return (
     <>
-      <Leva collapsed oneLineLabels />
+      <LevaPanel store={sceneStore} collapsed oneLineLabels />
       {showUploadDialog && (
         <PhotoDropzone
           onModelReady={(glbUrl) => {
@@ -78,8 +79,8 @@ export default function SolarpunkRoom({
         </button>
       )}
       <Canvas
-        camera={{ position: [0, 5, 12], fov: 50 }}
         gl={{ antialias: true, alpha: true }}
+        dpr={[1, 1.5]}
         className="h-screen w-full"
       >
         <PerspectiveCamera makeDefault position={[0, 5, 12]} fov={50} />
