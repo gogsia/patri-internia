@@ -41,7 +41,22 @@ type EditableFurnitureNodeProps = {
 // Priority: explicit `type` field → id substring (backward compat) → name substring (templates/old saves)
 function getFurnitureType(
   item: FurnitureItem
-): 'plant' | 'panel' | 'tower' | 'chair' | 'table' | 'lamp' | 'default' {
+):
+  | 'plant'
+  | 'panel'
+  | 'tower'
+  | 'chair'
+  | 'table'
+  | 'lamp'
+  | 'sofa'
+  | 'bookshelf'
+  | 'rug'
+  | 'desk'
+  | 'mirror'
+  | 'vase'
+  | 'curtain'
+  | 'bed'
+  | 'default' {
   if (item.type) return item.type;
 
   const id = item.id;
@@ -51,6 +66,14 @@ function getFurnitureType(
   if (id.includes('chair-')) return 'chair';
   if (id.includes('table-')) return 'table';
   if (id.includes('lamp-')) return 'lamp';
+  if (id.includes('sofa-')) return 'sofa';
+  if (id.includes('bookshelf-')) return 'bookshelf';
+  if (id.includes('rug-')) return 'rug';
+  if (id.includes('desk-')) return 'desk';
+  if (id.includes('mirror-')) return 'mirror';
+  if (id.includes('vase-')) return 'vase';
+  if (id.includes('curtain-')) return 'curtain';
+  if (id.includes('bed-')) return 'bed';
 
   const name = item.name.toLowerCase();
   if (name.includes('succulent') || name.includes('plant')) return 'plant';
@@ -59,6 +82,14 @@ function getFurnitureType(
   if (name.includes('chair')) return 'chair';
   if (name.includes('table')) return 'table';
   if (name.includes('lamp')) return 'lamp';
+  if (name.includes('sofa')) return 'sofa';
+  if (name.includes('bookshelf') || name.includes('shelf')) return 'bookshelf';
+  if (name.includes('rug')) return 'rug';
+  if (name.includes('desk')) return 'desk';
+  if (name.includes('mirror')) return 'mirror';
+  if (name.includes('vase')) return 'vase';
+  if (name.includes('curtain')) return 'curtain';
+  if (name.includes('bed')) return 'bed';
 
   return 'default';
 }

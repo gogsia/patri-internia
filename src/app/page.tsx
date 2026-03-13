@@ -11,6 +11,8 @@ import MaterialPicker from '@/components/ui/MaterialPicker';
 import SaveTemplateModal from '@/components/ui/SaveTemplateModal';
 import LayoutTemplates from '@/components/ui/LayoutTemplates';
 import ColorSchemes from '@/components/ui/ColorSchemes';
+import Logo from '@/components/ui/Logo';
+import PortfolioGallery from '@/components/ui/PortfolioGallery';
 import { useHistory } from '@/hooks/useHistory';
 import { useUndoRedo } from '@/hooks/useUndoRedo';
 import { useFurnitureKeyboard } from '@/hooks/useFurnitureKeyboard';
@@ -531,6 +533,9 @@ export default function Home() {
       ))}
 
       <KeyboardShortcuts />
+
+      <Logo />
+      <PortfolioGallery />
 
       <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 text-center text-xs text-gray-400">
         <p>Drag to move • Arrows for position • Q/E rotate • +/- scale</p>

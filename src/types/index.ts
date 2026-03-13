@@ -11,7 +11,21 @@ export interface ShaderUniforms {
   uTexture?: { value: THREE.Texture };
 }
 
-export type FurnitureType = 'plant' | 'panel' | 'tower' | 'chair' | 'table' | 'lamp';
+export type FurnitureType =
+  | 'plant'
+  | 'panel'
+  | 'tower'
+  | 'chair'
+  | 'table'
+  | 'lamp'
+  | 'sofa'
+  | 'bookshelf'
+  | 'rug'
+  | 'desk'
+  | 'mirror'
+  | 'vase'
+  | 'curtain'
+  | 'bed';
 
 export interface FurnitureItem {
   id: string;

@@ -11,10 +11,10 @@ export function useSceneControls() {
       ambientColor: '#d4af37',
       pointLightIntensity: { value: 1.5, min: 0, max: 4, step: 0.1 },
       pointLightColor: '#7ddf64',
-      autoRotate: true,
+      autoRotate: false,
       autoRotateSpeed: { value: 2, min: 0, max: 8, step: 0.25 },
       enablePixelation: true,
-      pixelSize: { value: 6, min: 1, max: 16, step: 1 },
+      pixelSize: { value: 2, min: 1, max: 16, step: 1 },
       showGrid: { value: true, label: 'Floor Grid' },
     },
     { store: sceneStore }

@@ -230,7 +230,12 @@ export function getFurnitureCategory(
     return 'tech';
   }
 
-  if (lower.includes('chair') || lower.includes('seat')) {
+  if (
+    lower.includes('chair') ||
+    lower.includes('seat') ||
+    lower.includes('sofa') ||
+    lower.includes('bed')
+  ) {
     return 'seating';
   }
 

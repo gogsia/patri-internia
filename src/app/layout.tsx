@@ -11,10 +11,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>Solarpunk Interiors | 3D Design Explorer</title>
+        <title>Interia | 3D Interior Design Explorer</title>
         <meta
           name="description"
-          content="Immersive 3D solarpunk interior design platform with godlike orbital navigation"
+          content="Interia — immersive 3D interior design platform with portfolio showcase"
         />
         <meta
           name="keywords"
